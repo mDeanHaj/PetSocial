@@ -1,0 +1,43 @@
+<%- include("partials/header.ejs") %>
+<body>
+  <div class="content-wrap">
+    <h1>Updating a Pet Profile</h1>
+    <form method="POST" action="/edit/pet">
+      <input type="hidden" name="profile_id" value="<%= profile.profile_id %>">
+
+      Name:
+      <input type="text" name="name" value="<%= profile.name %>"><br>
+
+      Species:
+      <input type="text" name="species" value="<%= profile.species %>"><br>
+
+      Age:
+      <input type="text" name="age" value="<%= profile.age %>"><br>
+
+      Gender:
+      <input type="text" name="gender" value="<%= profile.gender %>"><br>
+
+      Zipcode:
+      <input type="text" name="zipcode" value="<%= location.zipcode %>"><br>
+
+      City:
+      <input type="text" name="city" value="<%= location.city %>"><br>
+
+      State:
+      <input type="text" name="state" value="<%= location.state %>"><br>
+      <br>      
+
+      Bio:
+      <textarea name="bio"><%= profile.bio %></textarea><br>
+
+      Image URL:
+      <input type="text" name="image_url" value="<%= image %>"><br><br>
+
+      <button>Update Pet Profile</button>
+    </form>
+    <br>
+    <a href="/" class="button">Home</a>
+  </div>
+  <%- include("partials/footer.ejs") %>
+</body>
+</html>

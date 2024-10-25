@@ -1,0 +1,27 @@
+       <%- include("partials/header.ejs") %>
+       <body>
+           <div class="container list-container">
+               <h1 class="list-title">Update/Delete Profiles</h1>
+
+               <% if (profiles.length > 0) { %>
+                   <ul class="update-delete-list">
+                       <% profiles.forEach(profile => { %>
+                           <li class="list-item">
+                               <%= profile.name %> (<%= profile.species %>)
+                               <div>
+                                   <a href="/edit/pet?profile_id=<%= profile.profile_id %>">UPDATE</a> |
+                                   <a href="/profile/delete?profile_id=<%= profile.profile_id %>">DELETE</a>
+                               </div>
+                           </li>
+                       <% }); %>
+                   </ul>
+               <% } else { %>
+                   <p class="no-list-items">No Pet Profiles available.</p>
+               <% } %>
+           </div>
+
+    
+
+           <%- include("partials/footer.ejs") %>
+       </body>
+       </html>

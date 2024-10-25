@@ -1,0 +1,320 @@
+/* Global Styles */
+html * {
+  font-family: sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+p {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Header Styles */
+.headerStyle {
+  background-color: #f2f2f2;
+  padding: 10px;
+  text-align: center;
+}
+
+.mainLogo {
+  width: 450px;
+  height: auto;
+}
+
+.admin-header {
+  color: red;
+  font-weight: none;
+  text-decoration: none;
+  background: linear-gradient(to right, red, black);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+/* Navigation Styles */
+.navdiv {
+  background-color: #f2f2f2;
+}
+
+.navbar {
+  font-size: 20px; 
+  text-align: center;
+}
+
+.navbar a {
+  text-decoration: none;
+  background: linear-gradient(to right, black 50%, #d00101 50%);
+  background-clip: text;
+  background-size: 200% 100%;
+  background-position: 100%;
+  padding-left: 2px;
+  padding-right: 2px;
+  transition: background-position 0.5s ease;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navbar a:hover {
+  background-position: 0% 100%; 
+}
+
+/* Main Content Styles */
+.container {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.content-wrap {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  flex-direction: column;
+  text-align: center;
+}
+
+.main-para {
+  padding: 0;
+  border: 0;
+  margin: 4em 30%;  
+  margin-bottom: 10em;
+  font-size: 16px;   
+  line-height: 1.5;  
+  text-align: left;
+}
+
+.profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%; 
+  max-width: 1200px; 
+}
+
+.profile-box {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #b1afaf;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  text-align: left;
+  background: #eeeded;
+}
+
+/* List Styles */
+.update-delete-list {
+  list-style: none;
+  padding: 0;
+}
+
+.update-delete-list li {
+  background: #fff;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.list-container {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+.list-item {
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.list-item a:hover {
+  color: #4CAF50;
+}
+
+.list-title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.no-list-items {
+  text-align: center;
+  color: #999;
+}
+
+/* Form Styles */
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-group label {
+  margin-right: 20px;
+}
+
+input, textarea, select {
+  border-radius: 5px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+  margin-block: 5px;
+  vertical-align: middle;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  width: 16vw;
+  text-align: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: red;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25);
+}
+
+input:hover, textarea:hover, select:hover {
+  border-color: red;
+}
+
+input[type='radio'] {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid black;
+  box-sizing: border-box;
+  border-radius: 50%;
+  outline: none;
+  vertical-align: middle;
+  position: relative;
+}
+
+input[type='radio']:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  border-radius: 100%;    
+}
+
+input[type='radio']:checked:before {
+  background: red;
+}
+
+input[type='radio']:hover {
+  border-color: red;
+}
+
+button {
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+}
+
+button:hover {
+  color: red;
+  background-color: white;
+  border-color: red;
+  border: solid;
+  border-width: 1px !important;
+  padding: 10px;
+  margin: 10px;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  vertical-align: bottom;
+  padding: 10px 0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding-bottom: 1%;
+  padding-top: 1%;
+  width: 100%;
+}
+
+.site-footer .footer-bottom {
+  border-top: 1px solid #333;
+  background: #333;
+}
+
+/* Typography */
+h1 {
+  text-align: center;
+}
+
+h4 {
+  text-align: right;
+  color: red;
+  margin-right: 2%;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+}
+
+hr {
+  border: 0;
+  height: 1px; 
+  background-color: #333;
+  margin-bottom: 10px; 
+  width: 100%;
+}
+
+/* Other Styles */
+.bold {
+  font-weight: bold;
+}
+
+/* Image in Profile */
+.profile-box .profile-image {
+  width: 180px; 
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+/* Index Image */
+#index_img {
+  width: 30%;
+  height: 30%;
+  object-fit: cover;
+  border-radius: 50px;
+}

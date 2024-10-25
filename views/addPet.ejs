@@ -1,0 +1,87 @@
+    <%- include("partials/header.ejs") %>
+      <br>
+      <div class="content-wrap">
+      <h1>Adding a New Pet Profile</h1>
+        <br>
+
+        <form method="POST" action="/profile/new" onsubmit="return validateForm()">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="species">Species:</label>
+          <select name="species" id="species">
+            <option value="" disabled selected>(Select One)</option>
+            <option value="Dog">Dog</option>
+            <option value="Cat">Cat</option>
+            <option value="Bird">Bird</option>
+            <option value="Fish">Fish</option>
+            <option value="Snake">Snake</option>
+            <option value="Rabbit">Rabbit</option>
+            <option value="Hamster">Hamster</option>
+            <option value="Guinea Pig">Guinea Pig</option>
+            <option value="Turtle">Turtle</option>
+            <option value="Horse">Horse</option>
+            <option value="Reptile">Reptile</option>
+            <option value="Other">Other</option>
+          </select>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" name="age">
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="gender">Gender:</label>
+            <input type="radio" id="male" name="gender" value="Male">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="Female">
+            <label for="female">Female</label>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="zipcode">Zip Code:</label>
+            <input type="text" id="zip" name="zip">
+          </div>
+          <span id="zipcodeError"></span>
+          <br>
+          <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city">
+          </div>
+          <br>
+          <!-- City: <span id="city" name="city"></span> <br> -->
+          <div class="form-group">
+            <label for="state">State:</label>
+            <select id="state" name="state"></select>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="bio">Bio:</label>
+            <textarea name="bio"></textarea>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="imageurl">Image Url:</label>
+            <input type="text" id=imgurl name="image_url">
+          </div>
+          <br>
+          <br>
+          <button>Add Pet Profile</button>
+        </form>
+
+      <% if (typeof message != "undefined"){ %>
+               <h3><%=message%></h3>
+       <% } %>
+
+         </div>
+
+     <%- include("partials/footer.ejs") %>
+
+       <br><br><br>
+       <script src="/js/script.js"></script>
+    </body>
+    </html>
