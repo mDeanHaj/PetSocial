@@ -1,0 +1,48 @@
+<%- include("partials/accountsHeader.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Account</title>
+  <link rel="stylesheet" href="/css/styles.css"> <!-- Link to CSS I NEED TO FIX is styles (add s) -->
+</head>
+<body>
+  <header>
+    <h1>Welcome to Your Account Page</h1>
+  </header>
+
+  <section>
+    <h2>Your Pets</h2>
+    <div class="profiles-grid">
+      <% if (profiles.length > 0) { %>
+        <% profiles.forEach(function(profile) { %>
+          <div class="profile-box">
+            <div>
+              <h2><%= profile.name %></h2>
+              <p><strong>Species:</strong> <%= profile.species %></p>
+              <p><strong>Age:</strong> <%= profile.age %></p>
+              <p><strong>Gender:</strong> <%= profile.gender %></p>
+              <p><strong>Bio:</strong> <%= profile.bio %></p>
+            </div>
+            
+            <% if (profile.image_url) { %>
+              <img src="<%= profile.image_url %>" alt="<%= profile.name %>" class="profile-image">
+            <% } %>
+
+            <!-- Edit and Delete Links -->
+            <div class="profile-actions">
+                <a href="/edit/pet?profile_id=<%= profile.profile_id %>">UPDATE</a> |
+                <a href="/profile/delete?profile_id=<%= profile.profile_id %>" onclick="return confirm('Are you sure you want to delete this pet?')">DELETE</a>
+            </div>
+
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>You haven't added any pets yet.</p>
+      <% } %>
+    </div>
+    <a href="/add/pet">Add New Pet</a> <!-- Link to addPet page -->
+  </section>
+</body>
+</html>
