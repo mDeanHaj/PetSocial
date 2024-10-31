@@ -211,37 +211,6 @@ app.post("/profile/new", async (req, res) => {
   }
 });
 
-// Blog page route - display all posts
-app.get("/blog", async (req, res) => {
-  const posts = await executeSQL(`
-    SELECT bp.post_id, bp.title, bp.content, bp.created_at, u.username 
-    FROM blog_posts bp
-    JOIN users u ON bp.user_id = u.user_id
-    ORDER BY bp.created_at DESC
-  `);
-  
-  res.render("blog", { posts, userId: req.session.userId });
-});
-
-// Route to handle new post submission
-app.post("/blog", async (req, res) => {
-  if (!req.session.userId) {
-    return res.redirect("/login");
-  }
-  
-  const { title, content } = req.body;
-  
-  try {
-    await executeSQL(`
-      INSERT INTO blog_posts (user_id, title, content) VALUES (?, ?, ?)
-    `, [req.session.userId, title, content]);
-    res.redirect("/blog");
-  } catch (error) {
-    console.error("Error creating blog post:", error);
-    res.status(500).send("Error creating post");
-  }
-});
-
 // Route for logging out
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
