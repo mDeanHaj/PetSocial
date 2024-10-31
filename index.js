@@ -18,7 +18,8 @@ app.use(session({
 
 // Route for Home page
 app.get("/", async (req, res) => {
-  const url = "https://api.unsplash.com/photos/random/?client_id=YOUR_API_KEY&query=pets&orientation=landscape";
+  const url = "https://api.unsplash.com/photos/random/?client_id=7756a1e81f817c186cf57294e1c19b37b49c54b8f34e7c499ee0ce5cd86cd16e&featured=true&query=pets&width=800&height=500&orientation=landscape";
+
 
   try {
     // Dynamically import `node-fetch`
@@ -207,6 +208,37 @@ app.post("/profile/new", async (req, res) => {
   } catch (error) {
     console.error("Error creating profile:", error);
     res.status(500).render("error");
+  }
+});
+
+// Blog page route - display all posts
+app.get("/blog", async (req, res) => {
+  const posts = await executeSQL(`
+    SELECT bp.post_id, bp.title, bp.content, bp.created_at, u.username 
+    FROM blog_posts bp
+    JOIN users u ON bp.user_id = u.user_id
+    ORDER BY bp.created_at DESC
+  `);
+  
+  res.render("blog", { posts, userId: req.session.userId });
+});
+
+// Route to handle new post submission
+app.post("/blog", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+  
+  const { title, content } = req.body;
+  
+  try {
+    await executeSQL(`
+      INSERT INTO blog_posts (user_id, title, content) VALUES (?, ?, ?)
+    `, [req.session.userId, title, content]);
+    res.redirect("/blog");
+  } catch (error) {
+    console.error("Error creating blog post:", error);
+    res.status(500).send("Error creating post");
   }
 });
 
