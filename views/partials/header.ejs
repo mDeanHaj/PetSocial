@@ -15,19 +15,21 @@
   <body>
     <div class="headerStyle">
       <img src="/img/logo3.png" alt="logo" class="mainLogo">
-      <h4><a href="" class="admin-header">ADMIN ACCESS</a></h4>
-    </div>
-
-    <div class="headerStyle">
-      <h4><a href="/login" class="Login-header">Login</a></h4>
     </div>
     
     <br>
     
     <div class="navbar">
-      <a href="/">Home</a> 
-      <a href="/profile">Profiles</a>
-      <a href="/add/Pet">Add</a>
-      <a href="/list/edit">Edit</a>
+      <a href="/">Home</a>
+      <% if (userId) { %> <!-- Show links if logged in -->
+        <a href="/profile">Profiles</a>
+        <a href="/add/pet">Add Pet</a>
+        <a href="/account">Account</a>
+        <a href="/logout">Logout</a>
+      <% } else { %> <!-- Otherwise show login/signup -->
+        <a href="/login">Login</a>
+      <% } %>
     </div>
+    
+    
 

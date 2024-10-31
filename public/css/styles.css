@@ -318,3 +318,87 @@ hr {
   object-fit: cover;
   border-radius: 50px;
 }
+
+/* Profile Page Enhancements */
+.gallery {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.gallery-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.like-section {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.like-button {
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.like-button:hover {
+  background-color: #ff6b81;
+}
+
+.like-count {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* Navbar Improvements */
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px 0;
+  background-color: #333;
+}
+
+.navbar a {
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  background-color: #ff4757;
+  transition: background-color 0.3s ease;
+}
+
+/* Footer Enhancements */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.social-icons a {
+  color: #ff4757;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.social-icons a:hover {
+  color: white;
+  transition: color 0.3s ease;
+}
