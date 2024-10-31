@@ -17,12 +17,14 @@
       <a href="/"><img src="/img/logo3.png" alt="logo" class="mainLogo"></a>
     </div>
     
+    <br>
+    
     <div class="navbar">
       <a href="/">Home</a>
       <% if (userId) { %> <!-- Show links if logged in -->
         <a href="/profile">Profiles</a>
+        <a href="/add/pet">Add Pet</a>
         <a href="/account">Account</a>
-        <a href="/blog">Blog</a>
         <a href="/logout">Logout</a>
       <% } else { %> <!-- Otherwise show login/signup -->
         <a href="/login">Login</a>
