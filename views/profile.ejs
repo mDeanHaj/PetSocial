@@ -1,11 +1,12 @@
-  <%- include("partials/header.ejs") %>
-  <div class="content-wrap">
+<%- include("partials/header.ejs") %>
+<div class="content-wrap">
     <br>
     <h1>Profiles</h1>
 
     <div class="profiles-grid">
         <% profiles.forEach(function(profile) { %>
             <div class="profile-box">
+              <!-- Profile Info -->
               <div>
                 <h2><%= profile.name %></h2>
                 <p><strong>Species:</strong> <%= profile.species %></p>
@@ -13,16 +14,24 @@
                 <p><strong>Gender:</strong> <%= profile.gender %></p>
                 <p><strong>Bio:</strong> <%= profile.bio %></p>
               </div>
-              
-                <% if (profile.image_url) { %>
-                    <img src="<%= profile.image_url %>" alt="<%= profile.name %>" class="profile-image">
-                <% } %>
-              
+
+              <!-- Photo Gallery -->
+              <% if (profile.images && profile.images.length > 0) { %>
+                <div class="gallery">
+                  <% profile.images.forEach((image, index) => { %>
+                    <img src="<%= image.image_url %>" alt="<%= profile.name %> photo <%= index + 1 %>" class="gallery-image">
+                  <% }); %>
+                </div>
+              <% } else { %>
+                <img src="<%= profile.image_url || '/img/default-profile.png' %>" alt="<%= profile.name %>" class="profile-image">
+              <% } %>
+
             </div>
         <% }); %>
     </div>
-
-  </div>
-  <%- include("partials/footer.ejs") %>
-  </body>
-  </html>
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<%- include("partials/footer.ejs") %>
+<script src="/js/scripts.js"></script>
+</body>
+</html>

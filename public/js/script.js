@@ -91,3 +91,14 @@ async function getRandomImage() {
     document.getElementById("imgurl").value = image;
   }
 }
+
+function toggleLike(profileId) {
+  fetch(`/like/${profileId}`, { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById(`like-count-${profileId}`).innerText = data.likes;
+      }
+    })
+    .catch(error => console.error('Error liking profile:', error));
+}

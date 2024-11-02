@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your main stylesheet -->
+</head>
+<body>
+    <!-- Header Section -->
+    <%- include("partials/header.ejs") %>
+
+    <!-- Main Content -->
+    <div class="content-wrap">
+        <h1 class="page-title">Create Your Account</h1>
+
+        <form action="/signup" method="POST" class="form-container">
+            <div class="form-group">
+                <label for="name">First Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="lastname">Last Name:</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="form-button">Sign Up</button>
+        </form>
+
+        <p class="form-footer">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+
+    <!-- Footer -->
+    <%- include("partials/footer.ejs") %>
+</body>
+</html>
