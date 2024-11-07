@@ -1,0 +1,59 @@
+<%- include("partials/adminHeader.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Account</title>
+  <link rel="stylesheet" href="/css/styles.css"> 
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1 class="page-title">Your Account Admin</h1>
+  </header>
+
+  <!-- Account Content Section -->
+  <section class="content-wrap">
+    <h2>Your Pets</h2>
+
+    <div class="profiles-grid">
+      <% if (profiles.length > 0) { %>
+        <% profiles.forEach(function(profile) { %>
+          <div class="profile-box">
+            <div class="profile-info">
+              <h2 class="profile-name"><%= profile.name %></h2>
+              <p><strong>Species:</strong> <%= profile.species %></p>
+              <p><strong>Age:</strong> <%= profile.age %></p>
+              <p><strong>Gender:</strong> <%= profile.gender %></p>
+              <p><strong>Bio:</strong> <%= profile.bio %></p>
+            </div>
+            
+            <!-- Profile Image -->
+            <% if (profile.image_url) { %>
+              <img src="<%= profile.image_url %>" alt="<%= profile.name %>" class="profile-image">
+            <% } %>
+
+            <!-- Edit and Delete Links -->
+            <div class="profile-actions">
+              <a href="/edit/pet?profile_id=<%= profile.profile_id %>" class="action-link">Update</a>
+              <span>|</span>
+              <a href="/profile/delete?profile_id=<%= profile.profile_id %>" class="action-link" onclick="return confirm('Are you sure you want to delete this pet?')">Delete</a>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p class="no-pets-message">You haven't added any pets yet.</p>
+      <% } %>
+    </div>
+
+    <!-- Add New Pet Button -->
+    <div class="add-pet">
+      <a href="/add/pet" class="form-button">Add New Pet</a>
+    </div>
+  </section>
+  
+  <!-- Footer Section -->
+  <%- include("partials/footer.ejs") %>
+</body>
+</html>
