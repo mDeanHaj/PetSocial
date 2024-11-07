@@ -241,6 +241,12 @@ app.post("/blog", async (req, res) => {
   }
 });
 
+// Route for Friends page
+app.get("/friends", (req, res) => {
+  res.render("friends", { userId: req.session.userId });
+});
+
+
 // Route for logging out
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
