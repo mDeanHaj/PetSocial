@@ -253,6 +253,42 @@ app.post("/profile/new", async (req, res) => {
   }
 });
 
+// Route for the blog page
+app.get("/blog", async (req, res) => {
+  //await createPostsTable();
+  const sql = `SELECT p.title, p.content, p.created_at, u.username
+               FROM posts p
+               JOIN users u ON p.user_id = u.user_id
+               ORDER BY p.created_at DESC`;
+
+  const posts = await executeSQL(sql);
+  res.render("blog", { posts, userId: req.session.userId });
+});
+
+// Route to handle new blog post submission
+app.post("/blog", async (req, res) => {
+
+  const { title, content } = req.body;
+
+  if (!req.session.userId) {
+    return res.status(403).send("You must be logged in to post.");
+  }
+
+  try {
+    await executeSQL(`INSERT INTO posts (title, content, user_id, created_at) VALUES (?, ?, ?, NOW())`,
+        [title, content, req.session.userId]);
+    res.redirect("/blog");
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).send("Error creating post");
+  }
+});
+
+// Route for Friends page
+app.get("/friends", (req, res) => {
+  res.render("friends", { userId: req.session.userId });
+});
+
 // Route for logging out
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
