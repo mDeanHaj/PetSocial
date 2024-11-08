@@ -8,10 +8,13 @@
     <div class="blog-posts">
         <% if (posts.length > 0) { %>
             <% posts.forEach(post => { %>
-                <div class="post">
+                <div class="post" data-id="<%= post.post_id %>">
                     <h2 class="post-title"><%= post.title %></h2>
                     <p class="post-author">By <strong><%= post.username %></strong> on <%= new Date(post.created_at).toLocaleDateString() %></p>
                     <p class="post-content"><%= post.content %></p>
+                    <% if (post.user_id === userId) { %>
+                        <span class="delete-post" onclick="deletePost('<%= post.post_id %>')">✖</span>
+                    <% } %>
                 </div>
                 <hr class="post-divider">
             <% }) %>
@@ -46,6 +49,6 @@
 <br/><br/>
 
 <%- include("partials/footer.ejs") %>
-
+<script src="/js/script.js"></script>
 </body>
 </html>

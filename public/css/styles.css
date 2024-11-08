@@ -567,3 +567,17 @@ input {
   margin-top: 5px;
 }
 
+.post {
+  position: relative; /* Ensure the delete option aligns within this container */
+  padding-right: 30px; /* Add some padding for spacing */
+}
+
+.delete-post {
+  color: red;
+  cursor: pointer;
+  font-size: 0.9em;
+  position: absolute;
+  margin-right: 10px;
+  top: 0;
+  right: 0;
+}

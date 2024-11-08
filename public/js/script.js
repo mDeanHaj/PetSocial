@@ -102,3 +102,27 @@ function toggleLike(profileId) {
     })
     .catch(error => console.error('Error liking profile:', error));
 }
+
+// Function to delete posts
+async function deletePost(postId) {
+  // Show confirmation pop-up
+  const isConfirmed = confirm("Are you sure you want to delete this post?");
+
+  if (isConfirmed) {
+    const response = await fetch(`/posts/${postId}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      // Remove the post element from the DOM by matching data-post_id
+      const postElement = document.querySelector(`.post[data-id="${postId}"]`);
+      if (postElement) {
+        postElement.remove();
+      }
+    } else {
+      alert("Failed to delete the post. Please try again.");
+    }
+  } else {
+    console.log("Deletion cancelled");
+  }
+}

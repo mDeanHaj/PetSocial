@@ -261,7 +261,7 @@ app.post("/profile/new", async (req, res) => {
 // Route for the blog page
 app.get("/blog", async (req, res) => {
   //await createPostsTable();
-  const sql = `SELECT p.title, p.content, p.created_at, u.username
+  const sql = `SELECT p.post_id, p.title, p.content, p.created_at, u.username, p.user_id
                FROM posts p
                JOIN users u ON p.user_id = u.user_id
                ORDER BY p.created_at DESC`;
@@ -286,6 +286,24 @@ app.post("/blog", async (req, res) => {
   } catch (error) {
     console.error("Error creating post:", error);
     res.status(500).send("Error creating post");
+  }
+});
+
+// Route to delete posts
+app.delete("/posts/:id", async (req, res) => {
+  const postId = req.params.id;
+  const userId = req.session.userId;
+  // Check if the user owns the post
+  const sqlCheck = "SELECT * FROM posts WHERE post_id = ? AND user_id = ?";
+  const post = await executeSQL(sqlCheck, [postId, userId]);
+
+  if (post.length > 0) {
+    // Delete the post
+    const sqlDelete = "DELETE FROM posts WHERE post_id = ?";
+    await executeSQL(sqlDelete, [postId]);
+    res.json({ success: true });
+  } else {
+    res.json({ success: false, message: "Unauthorized" });
   }
 });
 
