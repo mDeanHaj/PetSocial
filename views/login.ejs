@@ -1,35 +1,6 @@
 <%- include("partials/header.ejs") %>
-<!DOCTYPE html>
-<html lang="en">
 
-<style>
-    .form-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 35vh;
-    }
-
-    .form-group {
-        margin-bottom: 5px;
-    }
-
-    label, input {
-        display: block;
-        text-align: center;
-    }
-
-    input {
-        margin-top: 5px;
-    }
-</style>
-
-
-
-
-<body>
-    <div class="form-container">
+    <div class="content-wrap">
         <form action="/login" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
@@ -45,8 +16,12 @@
         </form>
 
         <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+
+    <h6><br><a href="/reset-password">Forgot Password?</a></h6>
     </div>
 </body>
 
+<%- include("partials/footer.ejs") %>
 
+</body>
 </html>

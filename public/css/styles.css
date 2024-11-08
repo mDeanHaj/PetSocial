@@ -8,6 +8,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
+  padding: 0;
 }
 
 p {
@@ -44,49 +45,58 @@ p {
 }
 
 .navbar {
-  font-size: 20px; 
-  text-align: center;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px 0;
+  background-color: #333;
 }
 
 .navbar a {
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
   text-decoration: none;
-  background: linear-gradient(to right, black 50%, #d00101 50%);
+  background: linear-gradient(to right, rgb(255, 255, 255) 50%, #d00101 50%);
   background-clip: text;
   background-size: 200% 100%;
   background-position: 100%;
-  padding-left: 2px;
-  padding-right: 2px;
-  transition: background-position 0.5s ease;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: background-position 0.5s ease;
 }
 
 .navbar a:hover {
-  background-position: 0% 100%; 
+  background-color: #ff4757;
+  background-position: 0% 100%;
 }
 
 /* Main Content Styles */
 .container {
-  width: 80%;
-  margin: auto;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
   overflow: hidden;
 }
 
 .content-wrap {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   text-align: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
 }
 
 .main-para {
   padding: 0;
   border: 0;
-  margin: 4em 30%;  
-  margin-bottom: 10em;
-  font-size: 16px;   
-  line-height: 1.5;  
+  margin: 4em 5%;
+  font-size: 16px;
+  line-height: 1.5;
   text-align: left;
 }
 
@@ -95,8 +105,8 @@ p {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
-  width: 100%; 
-  max-width: 1200px; 
+  width: 100%;
+  max-width: 1200px;
 }
 
 .profile-box {
@@ -108,6 +118,19 @@ p {
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
   text-align: left;
   background: #eeeded;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 /* List Styles */
@@ -201,6 +224,7 @@ input:hover, textarea:hover, select:hover {
   border-color: red;
 }
 
+/* Radio Button Customization */
 input[type='radio'] {
   -webkit-appearance: none;
   width: 16px;
@@ -234,6 +258,7 @@ input[type='radio']:hover {
   border-color: red;
 }
 
+/* Button Styles */
 button {
   background-color: red;
   color: white;
@@ -259,131 +284,8 @@ footer {
   background-color: #333;
   color: white;
   text-align: center;
-  vertical-align: bottom;
   padding: 10px 0;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  padding-bottom: 1%;
-  padding-top: 1%;
   width: 100%;
-}
-
-.site-footer .footer-bottom {
-  border-top: 1px solid #333;
-  background: #333;
-}
-
-/* Typography */
-h1 {
-  text-align: center;
-}
-
-h4 {
-  text-align: right;
-  color: red;
-  margin-right: 2%;
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-left: 0;
-}
-
-hr {
-  border: 0;
-  height: 1px; 
-  background-color: #333;
-  margin-bottom: 10px; 
-  width: 100%;
-}
-
-/* Other Styles */
-.bold {
-  font-weight: bold;
-}
-
-/* Image in Profile */
-.profile-box .profile-image {
-  width: 180px; 
-  height: 180px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-left: auto;
-  margin-right: 10px;
-}
-
-/* Index Image */
-#index_img {
-  width: 30%;
-  height: 30%;
-  object-fit: cover;
-  border-radius: 50px;
-}
-
-/* Profile Page Enhancements */
-.gallery {
-  display: flex;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.gallery-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.like-section {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.like-button {
-  background-color: #ff4757;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.like-button:hover {
-  background-color: #ff6b81;
-}
-
-.like-count {
-  margin-left: 10px;
-  font-weight: bold;
-}
-
-/* Navbar Improvements */
-.navbar {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  padding: 15px 0;
-  background-color: #333;
-}
-
-.navbar a {
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
-.navbar a:hover {
-  background-color: #ff4757;
-  transition: background-color 0.3s ease;
-}
-
-/* Footer Enhancements */
-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 10px 0;
 }
 
 .footer-content {
@@ -403,121 +305,265 @@ footer {
   transition: color 0.3s ease;
 }
 
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  .main-para {
+    margin: 2em 10%;
+  }
+
+  .profiles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .profile-image {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-para {
+    margin: 1em 5%;
+  }
+
+  .navbar a {
+    padding: 5px 8px;
+    font-size: 16px;
+  }
+
+  .like-button {
+    padding: 3px 8px;
+  }
+}
+
+/* Blog Page Styles */
+.page-title {
+  font-size: 2em;
+  color: #ff4757;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
 .blog-posts {
-  margin: 20px 0;
+  width: 100%;
+  max-width: 1000px; /* Increase max-width for wider posts */
+  margin: 20px auto;
 }
 
 .post {
-  margin-bottom: 20px;
-  padding: 10px;
+  background-color: #ffffff;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  width: 100%;
 }
 
 .post-title {
   font-size: 1.5em;
   color: #333;
+  margin-bottom: 5px;
 }
 
 .post-author {
   font-size: 0.9em;
-  color: #777;
+  color: #666;
   margin-bottom: 10px;
 }
 
 .post-content {
   font-size: 1em;
+  line-height: 1.5;
   color: #444;
-  line-height: 1.6;
 }
 
-.new-post-form {
-  margin-top: 30px;
+.post-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
 }
 
-.login-prompt {
+.no-posts-message {
   font-size: 1em;
-  color: #555;
+  color: #999;
   text-align: center;
+  margin-top: 20px;
 }
 
-.content-wrap {
+/* New Post Form Styles */
+/* New Post Form Styles */
+.new-post-form {
+  background-color: #f9f9f9;
   padding: 20px;
-  max-width: 800px;
-  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Make the form container much wider */
+  max-width: 1000px; /* Set a maximum width */
+  margin: 40px auto;
+  text-align: left;
 }
 
-.page-title {
-  text-align: center;
-  margin-bottom: 20px;
+.new-post-form h2 {
+  color: #ff4757;
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+
+.new-post-form .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.new-post-form label {
+  font-size: 1em;
+  margin-bottom: 5px;
   color: #333;
 }
 
-.profiles-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.profile-box {
-  padding: 15px;
+.new-post-form input[type="text"],
+.new-post-form textarea {
+  width: 100%; /* Full width of the container */
+  padding: 12px 15px; /* Increased padding for comfort */
   border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  resize: vertical;
+  box-sizing: border-box; /* Ensures padding doesn’t increase width */
 }
 
-.profile-info {
-  flex: 1;
-}
-
-.profile-image {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-actions {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.action-link {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.action-link:hover {
-  color: #0056b3;
-}
-
-.form-button {
-  display: inline-block;
-  padding: 10px 20px;
-  margin-top: 20px;
+.new-post-form .form-button {
+  background-color: #ff4757;
   color: #fff;
-  background-color: #007bff;
   border: none;
   border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Full width on mobile */
+}
+
+.new-post-form .form-button:hover {
+  background-color: #e04040;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .new-post-form {
+    width: 95%; /* Adjust to screen width on smaller devices */
+  }
+}
+
+
+.login-prompt {
+  font-size: 1em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-prompt a {
+  color: #ff4757;
   text-decoration: none;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .blog-posts, .new-post-form {
+    max-width: 95%;
+  }
+
+  .post-title {
+    font-size: 1.25em;
+  }
+
+  .new-post-form {
+    width: 90%;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-para {
+    margin: 1em 5%;
+  }
+
+  .navbar a {
+    padding: 5px 8px;
+    font-size: 16px;
+  }
+
+  .like-button {
+    padding: 3px 8px;
+  }
+}
+
+.center-table {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;  
+}
+table {
+  border-collapse: collapse;
+  width: 80%;
+  text-align: center;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+th {
+  background-color: #f2f2f2;
+}
+a.action-link {
+  margin: 0 5px;
+  text-decoration: none;
+  color: #007BFF;
+}
+a.action-link:hover {
+  text-decoration: underline;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 35vh;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
+
+label, input {
+  display: block;
   text-align: center;
 }
 
-.form-button:hover {
-  background-color: #0056b3;
-}
-
-.no-pets-message {
-  color: #666;
-  text-align: center;
-  font-style: italic;
+input {
+  margin-top: 5px;
 }
 

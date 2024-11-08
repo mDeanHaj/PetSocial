@@ -13,11 +13,7 @@
 <body>
   <div class="headerStyle">
     <a href="/"><img src="/img/logo3.png" alt="logo" class="mainLogo"></a>
-    <% if (userId) { %> <!-- Show logout if logged in -->
-      <div class="logout-container">
-        <h4><a href="/logout" class="logout-button">Logout</a></h4>
-      </div>
-    <% } %>
+    
   </div>
   
   <div class="navbar">
@@ -26,9 +22,11 @@
       <a href="/friends">Friends</a>  
       <a href="/blog">Blog</a> 
       <a href="/account">Account</a>
+      <% if (userId) { %> <!-- Show logout if logged in -->
+      <a href="/logout" class="logout-button">Logout</a>
+      <% } %>
     <% } else { %> <!-- Otherwise show login/signup -->
       <a href="/login">Login</a>
+      <a href="/blog">Blog</a> 
     <% } %>
   </div>
-</body>
-</html>
