@@ -61,6 +61,11 @@ app.get("/relationship", (req, res) => {
   res.render("relationship", { userId: req.session.userId });
 });
 
+// Route for Edit Blog
+app.get("/editBlog", (req, res) => {
+  res.render("editBlog", { userId: req.session.userId });
+});
+
 // Edit List route
 app.get("/list/edit", async function (req, res) {
   const sql = `SELECT * FROM profile ORDER BY profile_id`;

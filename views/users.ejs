@@ -1,43 +1,6 @@
 <%- include("partials/adminHeader.ejs") %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Users</title>
-  <style>
-    /* Center the table */
-    .center-table {
-      display: flex;
-      justify-content: center;
-      margin-top: 50px;
-    }
-    table {
-      border-collapse: collapse;
-      width: 80%;
-      text-align: center;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    a.action-link {
-      margin: 0 5px;
-      text-decoration: none;
-      color: #007BFF;
-    }
-    a.action-link:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="center-table">
+<div class="center-table">
     <table>
       <thead>
         <tr>
@@ -63,7 +26,9 @@
         <% }) %>
       </tbody>
     </table>
-  </div>
+</div>
+
+<%- include("partials/footer.ejs") %>
 
 </body>
 </html>
