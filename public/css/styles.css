@@ -32,7 +32,7 @@ p {
 
 .admin-header {
   color: red;
-  font-weight: none;
+  font-weight: normal;
   text-decoration: none;
   background: linear-gradient(to right, red, black);
   -webkit-text-fill-color: transparent;
