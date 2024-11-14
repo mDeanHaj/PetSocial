@@ -102,3 +102,80 @@ function toggleLike(profileId) {
     })
     .catch(error => console.error('Error liking profile:', error));
 }
+
+// Function to delete posts
+async function deletePost(postId) {
+  // Show confirmation pop-up
+  const isConfirmed = confirm("Are you sure you want to delete this post?");
+
+  if (isConfirmed) {
+    const response = await fetch(`/blog/${postId}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      // Remove the post element from the DOM by matching data-post_id
+      const postElement = document.querySelector(`.post[data-id="${postId}"]`);
+      if (postElement) {
+        postElement.remove();
+      }
+    } else {
+      alert("Failed to delete the post. Please try again.");
+    }
+  } else {
+    console.log("Deletion cancelled");
+  }
+}
+
+async function editPost(postId, newTitle, newContent) {
+  try {
+    // Log the inputs to make sure they are not undefined or empty
+    console.log("Post ID:", postId, "Title:", newTitle, "Content:", newContent);
+
+    // Validate the inputs before making the request
+    if (!newTitle || !newContent) {
+      alert("Both title and content are required.");
+      return; // Stop the function if the inputs are invalid
+    }
+
+    // Prepare the data to send in the body of the PUT request
+    const postData = { title: newTitle, content: newContent };
+    console.log("Sending data:", postData); // Log the data to be sent
+
+    const response = await fetch(`/blog/edit/${postId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    });
+
+    // Check the response status and handle it
+    const result = await response.json();
+    if (response.ok && result.success) {
+      window.location.reload(); // Reload the page or dynamically update the post
+    } else {
+      alert(result.message || 'Failed to update the post.');
+    }
+  } catch (error) {
+    console.error('Error updating post:', error);
+  }
+}
+
+
+// Show edit form
+function showEditForm(postId) {
+  document.getElementById(`edit-form-${postId}`).style.display = "block";
+}
+
+// Hide edit form
+function hideEditForm(postId) {
+  document.getElementById(`edit-form-${postId}`).style.display = "none";
+}
+
+// Submit edit form
+async function submitEdit(postId) {
+  const newTitle = document.getElementById(`edit-title`).value;
+  const newContent = document.getElementById(`edit-content`).value;
+  await editPost(postId, newTitle, newContent);
+}

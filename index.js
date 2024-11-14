@@ -8,10 +8,14 @@ const session = require('express-session');
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const sgMail = require('@sendgrid/mail');
+const blogRouter = require('./public/routes/blog/blogRoute');
+const { executeSQL } = require('./public/helpers/dbHelpers');
+
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Initialize session
 app.use(session({
@@ -61,9 +65,9 @@ app.get("/relationship", (req, res) => {
   res.render("relationship", { userId: req.session.userId });
 });
 
-// Route for Edit Blog
-app.get("/editBlog", (req, res) => {
-  res.render("editBlog", { userId: req.session.userId });
+// Route for Explore page
+app.get("/explore", (req, res) => {
+  res.render("explore", { userId: req.session.userId });
 });
 
 // Edit List route
@@ -71,6 +75,11 @@ app.get("/list/edit", async function (req, res) {
   const sql = `SELECT * FROM profile ORDER BY profile_id`;
   const rows = await executeSQL(sql);
   res.render("listEdit", { profiles: rows, userId: req.session.userId });
+});
+
+// Route for Edit Blog
+app.get("/editBlog", (req, res) => {
+  res.render("editBlog", { userId: req.session.userId });
 });
 
 
@@ -258,36 +267,60 @@ app.post("/profile/new", async (req, res) => {
   }
 });
 
-// Route for the blog page
-app.get("/blog", async (req, res) => {
-  //await createPostsTable();
-  const sql = `SELECT p.title, p.content, p.created_at, u.username
-               FROM posts p
-               JOIN users u ON p.user_id = u.user_id
-               ORDER BY p.created_at DESC`;
-
-  const posts = await executeSQL(sql);
-  res.render("blog", { posts, userId: req.session.userId });
-});
-
-// Route to handle new blog post submission
-app.post("/blog", async (req, res) => {
-
-  const { title, content } = req.body;
-
-  if (!req.session.userId) {
-    return res.status(403).send("You must be logged in to post.");
-  }
-
-  try {
-    await executeSQL(`INSERT INTO posts (title, content, user_id, created_at) VALUES (?, ?, ?, NOW())`,
-        [title, content, req.session.userId]);
-    res.redirect("/blog");
-  } catch (error) {
-    console.error("Error creating post:", error);
-    res.status(500).send("Error creating post");
-  }
-});
+// // Route for the blog page
+app.use('/blog', blogRouter);
+// app.get("/blog", async (req, res) => {
+//   //await createPostsTable();
+//   const sql = `SELECT p.post_id, p.title, p.content, p.created_at, u.username, p.user_id
+//                FROM posts p
+//                JOIN users u ON p.user_id = u.user_id
+//                ORDER BY p.created_at DESC`;
+//
+//   const posts = await executeSQL(sql);
+//   res.render("blog", { posts, userId: req.session.userId });
+// });
+//
+// // Route to handle new blog post submission
+// app.post("/blog", async (req, res) => {
+//
+//   const { title, content } = req.body;
+//
+//   if (!req.session.userId) {
+//     return res.status(403).send("You must be logged in to post.");
+//   }
+//
+//   try {
+//     await executeSQL(`INSERT INTO posts (title, content, user_id, created_at) VALUES (?, ?, ?, NOW())`,
+//         [title, content, req.session.userId]);
+//     res.redirect("/blog");
+//   } catch (error) {
+//     console.error("Error creating post:", error);
+//     res.status(500).send("Error creating post");
+//   }
+// });
+//
+// // Route to delete posts
+// app.delete("/posts/:id", async (req, res) => {
+//   const postId = req.params.id;
+//   const userId = req.session.userId;
+//   // Check if the user owns the post
+//   const sqlCheck = "SELECT * FROM posts WHERE post_id = ? AND user_id = ?";
+//   const post = await executeSQL(sqlCheck, [postId, userId]);
+//
+//   if (post.length > 0) {
+//     // Delete the post
+//     const sqlDelete = "DELETE FROM posts WHERE post_id = ?";
+//     await executeSQL(sqlDelete, [postId]);
+//     res.json({ success: true });
+//   } else {
+//     res.json({ success: false, message: "Unauthorized" });
+//   }
+// });
+//
+// // Route for Edit Blog
+// app.get("/editBlog", (req, res) => {
+//   res.render("editBlog", { userId: req.session.userId });
+// });
 
 // Route for Friends page
 app.get("/friends", (req, res) => {
@@ -495,15 +528,15 @@ app.post("/password-reset", async (req, res) => {
 
 
 
-// Helper function to execute SQL queries
-async function executeSQL(sql, params) {
-  return new Promise((resolve, reject) => {
-    pool.query(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-}
+// // Helper function to execute SQL queries
+// async function executeSQL(sql, params) {
+//   return new Promise((resolve, reject) => {
+//     pool.query(sql, params, (err, rows) => {
+//       if (err) reject(err);
+//       else resolve(rows);
+//     });
+//   });
+// }
 
 // Start server
 app.listen(3000, () => {

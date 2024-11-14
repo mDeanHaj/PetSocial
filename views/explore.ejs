@@ -1,0 +1,32 @@
+<%- include("partials/header.ejs") %>
+
+<div class="explore-container">
+  <h1 class="explore-title">Explore Nearby Pet-Friendly Locations</h1>
+  <div class="map-controls">
+    <button onclick="filterLocations('all')">All</button>
+    <button onclick="filterLocations('Pet Shelter')">Shelters</button>
+    <button onclick="filterLocations('Pet Park')">Parks</button>
+    <button onclick="filterLocations('Pet Store')">Stores</button>
+  </div>
+  <div id="map"></div>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoicnNhcnBhczIiLCJhIjoiY20zZXNzaDF0MDl3aTJqcHVtdHZhc2lucSJ9.oTPxQ1EEPT_7hSbKY4DJkg';
+
+  const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-74.5, 40],
+      zoom: 9
+  });
+
+  
+</script>
+
+<%- include("partials/footer.ejs") %>
+
+
+</body>
+</html>
