@@ -1,11 +1,63 @@
 <%- include("partials/header.ejs") %>
 
-<div class="content-wrap">
-    <h1>Friends</h1>
-    <p>Welcome to the Friends page! Here you can see a list of friends or add new ones.</p>
-  </div>
+<header>
+    <div class="content-wrap">
+        <h1>Friends</h1>
+        <p>Welcome to the Friends page! Here you can see a list of friends or add new ones.</p>
+    </div>
+</header>
 
-<!-- Footer -->
+<div class="center-block">
+    <h2>Add a Friend</h2>
+    <p class="bold">Your Friend ID: <span id="userFriendID" class="bold-text"><%= userId %></span></p><br>
+    <p class="bold">Enter your friend's Friend ID to send them a friend request using the box below.</p>
+    <form action="/friends/add" method="POST">
+        <input type="text" name="friendId" placeholder="Enter friend ID" required>
+        <button type="submit">Add Friend</button>
+    </form>
+</div>
+<br><br>
+<div class="center-block">
+    <h2>Friend Requests:</h2>
+    <% if (friendRequests.length > 0) { %>
+        <ul class="ul-friends">
+            <% friendRequests.forEach(request => { %>
+                <li class="li-friends">
+                    Friend request from <%= request.username %> (ID: <%= request.sender_id %>)
+                    <form action="/friends/accept" method="POST" style="display:inline;">
+                      <input type="hidden" name="requestId" value="<%= request.sender_id %>">
+                      <button type="submit">Accept</button>
+                    </form>
+                    <form action="/friends/ignore" method="POST" style="display:inline;">
+                      <input type="hidden" name="requestId" value="<%= request.sender_id %>">
+                      <button type="submit" class="button-ignore">Ignore</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No friend requests.</p>
+    <% } %>
+</div>
+
+<div class="center-block">
+    <h2>Current Friends:</h2>
+    <% if (friends.length > 0) { %>
+        <ul classs="ul-friends">
+            <% friends.forEach(friend => { %>
+                <li class="li-friends">     
+                    <% const friendUsername = friend.user_id1 === userId ? friend.username2 : friend.username1; %>
+                    <%= friendUsername %> (ID: <%= friend.user_id1 === userId ? friend.user_id2 : friend.user_id1 %>)
+                    <form action="/friends/unfriend" method="POST" style="display:inline;">
+                        <input type="hidden" name="friendId" value="<%= friend.user_id1 === userId ? friend.user_id2 : friend.user_id1 %>">
+                        <button type="submit" class="button-ignore">Unfriend</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No friends yet.</p>
+    <% } %>
+</div>
+<div class="content-wrap"></div>
 <%- include("partials/footer.ejs") %>
-</body>
-</html>

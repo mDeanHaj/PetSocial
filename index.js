@@ -289,60 +289,154 @@ app.post("/profile/new", async (req, res) => {
   }
 });
 
-// // Route for the blog page
+
 app.use('/blog', blogRouter);
-// app.get("/blog", async (req, res) => {
-//   //await createPostsTable();
-//   const sql = `SELECT p.post_id, p.title, p.content, p.created_at, u.username, p.user_id
-//                FROM posts p
-//                JOIN users u ON p.user_id = u.user_id
-//                ORDER BY p.created_at DESC`;
-//
-//   const posts = await executeSQL(sql);
-//   res.render("blog", { posts, userId: req.session.userId });
-// });
-//
-// // Route to handle new blog post submission
-// app.post("/blog", async (req, res) => {
-//
-//   const { title, content } = req.body;
-//
-//   if (!req.session.userId) {
-//     return res.status(403).send("You must be logged in to post.");
-//   }
-//
-//   try {
-//     await executeSQL(`INSERT INTO posts (title, content, user_id, created_at) VALUES (?, ?, ?, NOW())`,
-//         [title, content, req.session.userId]);
-//     res.redirect("/blog");
-//   } catch (error) {
-//     console.error("Error creating post:", error);
-//     res.status(500).send("Error creating post");
-//   }
-// });
-//
-// // Route to delete posts
-// app.delete("/posts/:id", async (req, res) => {
-//   const postId = req.params.id;
-//   const userId = req.session.userId;
-//   // Check if the user owns the post
-//   const sqlCheck = "SELECT * FROM posts WHERE post_id = ? AND user_id = ?";
-//   const post = await executeSQL(sqlCheck, [postId, userId]);
-//
-//   if (post.length > 0) {
-//     // Delete the post
-//     const sqlDelete = "DELETE FROM posts WHERE post_id = ?";
-//     await executeSQL(sqlDelete, [postId]);
-//     res.json({ success: true });
-//   } else {
-//     res.json({ success: false, message: "Unauthorized" });
-//   }
-// });
-//
-// // Route for Edit Blog
-// app.get("/editBlog", (req, res) => {
-//   res.render("editBlog", { userId: req.session.userId });
-// });
+
+
+// Route for Friends page
+app.get("/friends", (req, res) => {
+  const userId = req.session.userId;
+  const friendRequestsQuery = `
+  SELECT friend_requests.sender_id, users.username 
+  FROM friend_requests 
+  JOIN users ON friend_requests.sender_id = users.user_id 
+  WHERE friend_requests.receiver_id = ? AND friend_requests.status = 'pending'
+`;
+const friendsQuery = `
+  SELECT friends.*, 
+  u1.username AS username1, 
+  u2.username AS username2 
+  FROM friends 
+  JOIN users u1 ON friends.user_id1 = u1.user_id 
+  JOIN users u2 ON friends.user_id2 = u2.user_id 
+  WHERE friends.user_id1 = ? OR friends.user_id2 = ?
+`;
+
+  pool.query(friendRequestsQuery, [userId], (error, friendRequests) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error fetching friend requests");
+    } else {
+      pool.query(friendsQuery, [userId, userId], (error, friends) => {
+        if (error) {
+          console.error(error);
+          res.status(500).send("Error fetching friends list");
+        } else {
+          res.render("friends", { userId: userId, friendRequests: friendRequests, friends: friends });
+        }
+      });
+    }
+  });
+});
+
+
+// Route to handle adding a friend request to DB
+app.post("/friends/add", (req, res) => {
+  const senderId = req.session.userId;
+  const receiverId = req.body.friendId;
+
+  const query = "INSERT INTO friend_requests (sender_id, receiver_id, status, request_date) VALUES (?, ?,'pending', NOW())";
+  pool.query(query, [senderId, receiverId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error sending friend request");
+    } else {
+      res.redirect("/friends");
+    }
+  });
+});
+
+// Route to fetch friend requests from DB
+app.get("/friends/requests", (req, res) => {
+  const userId = req.session.userId;
+  const query = "SELECT * FROM friend_requests WHERE receiver_id = ? AND status = 'pending'";
+  pool.query(query, [userId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error fetching friend requests");
+    } else {
+      res.render("friends", { userId: userId, friendRequests: results, friends: [] });
+    }
+  });
+});
+
+// Route to accept a friend request
+app.post("/friends/accept", (req, res) => {
+  const userId = req.session.userId;
+  const senderId = req.body.requestId;
+
+  const insertQuery = "INSERT INTO friends (user_id1, user_id2) VALUES (?, ?)";
+  const deleteQuery = "DELETE FROM friend_requests WHERE sender_id = ? AND receiver_id = ?";
+
+  pool.query(insertQuery, [senderId, userId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error accepting friend request");
+    } else {
+      pool.query(deleteQuery, [senderId, userId], (error, results) => {
+        if (error) {
+          console.error(error);
+          res.status(500).send("Error deleting friend request");
+        } else {
+          res.redirect("/friends");
+        }
+      });
+    }
+  });
+});
+
+// Route to ignore a friend request
+app.post("/friends/ignore", (req, res) => {
+  const userId = req.session.userId;
+  const senderId = req.body.requestId;
+
+  const ignoreQuery = "DELETE FROM friend_requests WHERE sender_id = ? AND receiver_id = ?";
+
+  pool.query(ignoreQuery, [senderId, userId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error ignoring friend request");
+    } else {
+      res.redirect("/friends");
+    }
+  });
+});
+
+// Route to fetch current friends from DB
+app.get("/friends/list", (req, res) => {
+  const userId = req.session.userId;
+  const query = "SELECT * FROM friends WHERE user_id1 = ? OR user_id2 = ?";
+  pool.query(query, [userId, userId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error fetching friends list");
+    } else {
+      res.render("friends", { userId: userId, friendRequests: [], friends: results });
+    }
+  });
+});
+
+// Route to unfriend a user
+app.post("/friends/unfriend", (req, res) => {
+  const userId = req.session.userId;
+  const friendId = req.body.friendId;
+
+  const unfriendQuery = `
+    DELETE FROM friends 
+    WHERE (user_id1 = ? AND user_id2 = ?) 
+       OR (user_id1 = ? AND user_id2 = ?)
+  `;
+
+  pool.query(unfriendQuery, [userId, friendId, friendId, userId], (error, results) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error unfriending user");
+    } else {
+      res.redirect("/friends");
+    }
+  });
+});
+
 
 // Route for Friends page
 app.get("/friends", (req, res) => {
