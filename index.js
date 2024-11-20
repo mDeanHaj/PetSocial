@@ -70,6 +70,28 @@ app.get("/explore", (req, res) => {
   res.render("explore", { userId: req.session.userId });
 });
 
+app.get("/api/locations", async (req, res) => {
+  try {
+    // Fetch locations from your database
+    const sql = `
+      SELECT location_id, profile_id, city, state, zipcode, 'Pet Shelter' AS type
+      FROM location
+      UNION ALL
+      SELECT location_id + 1000, profile_id, city, state, zipcode, 'Pet Park' AS type
+      FROM location
+      UNION ALL
+      SELECT location_id + 2000, profile_id, city, state, zipcode, 'Pet Store' AS type
+      FROM location
+    `;
+
+    const locations = await executeSQL(sql);
+    res.json({ success: true, data: locations });
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    res.status(500).json({ success: false, message: "Error fetching locations" });
+  }
+});
+
 // Edit List route
 app.get("/list/edit", async function (req, res) {
   const sql = `SELECT * FROM profile ORDER BY profile_id`;

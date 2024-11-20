@@ -2,31 +2,124 @@
 
 <div class="explore-container">
   <h1 class="explore-title">Explore Nearby Pet-Friendly Locations</h1>
+
+  <!-- ZIP Code Input Section -->
+  <div class="zip-code-input">
+    <input
+      type="text"
+      id="zip-code"
+      placeholder="Enter ZIP Code"
+      maxlength="5"
+    />
+    <button onclick="goToZip()">Go</button>
+  </div>
+
+  <!-- Filter Buttons -->
   <div class="map-controls">
     <button onclick="filterLocations('all')">All</button>
     <button onclick="filterLocations('Pet Shelter')">Shelters</button>
     <button onclick="filterLocations('Pet Park')">Parks</button>
     <button onclick="filterLocations('Pet Store')">Stores</button>
   </div>
+
+  <!-- Map Container -->
   <div id="map"></div>
 </div>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
 <script>
-  mapboxgl.accessToken = 'pk.eyJ1IjoicnNhcnBhczIiLCJhIjoiY20zZXNzaDF0MDl3aTJqcHVtdHZhc2lucSJ9.oTPxQ1EEPT_7hSbKY4DJkg';
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoicnNhcnBhczIiLCJhIjoiY20zZXNzaDF0MDl3aTJqcHVtdHZhc2lucSJ9.oTPxQ1EEPT_7hSbKY4DJkg";
 
   const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-74.5, 40],
-      zoom: 9
+    container: "map",
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: [-118.2437, 34.0522], // Default: Los Angeles
+    zoom: 10,
   });
 
-  
+  const markers = [];
+
+  async function fetchLocations() {
+    try {
+      const response = await fetch("/api/locations");
+      const result = await response.json();
+      if (result.success) return result.data;
+      throw new Error("Failed to fetch locations");
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      return [];
+    }
+  }
+
+  async function addMarkers(filter) {
+    // Remove existing markers
+    markers.forEach((marker) => marker.remove());
+    markers.length = 0;
+
+    const locations = await fetchLocations();
+    const filteredLocations = locations.filter(
+      (location) => filter === "all" || location.type === filter
+    );
+
+    filteredLocations.forEach((location) => {
+      if (!location.latitude || !location.longitude) {
+        console.error("Invalid coordinates for location:", location);
+        return;
+      }
+
+      const marker = new mapboxgl.Marker()
+        .setLngLat([location.longitude, location.latitude])
+        .setPopup(
+          new mapboxgl.Popup().setHTML(
+            `<strong>${location.type}</strong><br>${location.city}, ${location.state}`
+          )
+        )
+        .addTo(map);
+
+      markers.push(marker);
+    });
+  }
+
+  function filterLocations(type) {
+    addMarkers(type);
+  }
+
+  async function goToZip() {
+    const zipCode = document.getElementById("zip-code").value;
+
+    if (!zipCode || zipCode.length !== 5) {
+      alert("Please enter a valid ZIP code.");
+      return;
+    }
+
+    try {
+      // Use a geocoding API to fetch the latitude and longitude of the ZIP code
+      const response = await fetch(
+        `https://api.zippopotam.us/us/${zipCode}`
+      );
+      const data = await response.json();
+
+      if (data.places && data.places.length > 0) {
+        const latitude = parseFloat(data.places[0].latitude);
+        const longitude = parseFloat(data.places[0].longitude);
+
+        // Center the map on the ZIP code
+        map.flyTo({
+          center: [longitude, latitude],
+          zoom: 12,
+        });
+      } else {
+        alert("Location not found. Please try another ZIP code.");
+      }
+    } catch (error) {
+      console.error("Error fetching ZIP code location:", error);
+      alert("Unable to locate the ZIP code. Please try again.");
+    }
+  }
+
+  // Load all markers initially
+  addMarkers("all");
 </script>
 
 <%- include("partials/footer.ejs") %>
-
-
-</body>
-</html>
