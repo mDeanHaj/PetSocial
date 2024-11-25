@@ -2,10 +2,14 @@ const express = require('express');
 const blogRouter = express.Router();
 const blogController = require('./blogController');
 
-
 // Route for the blog page - Get all posts
 blogRouter.get('/', async (req, res) => {
     try {
+        // Check if the user is an admin
+        if (req.session.role === 'admin') {
+            return res.redirect('/blog/admin'); // Redirect admin to their dashboard
+        }
+
         const posts = await blogController.getPostsFromDatabase();
         res.render('blog', { posts, userId: req.session.userId });
     } catch (error) {
@@ -49,7 +53,6 @@ blogRouter.put('/edit/:id', async (req, res) => {
     const postId = req.params.id;
     const userId = req.session.userId;
     const { title, content } = req.body;
-    console.log("Request body:", req.body); // Check if JSON data is being parsed correctly
 
     if (!userId) {
         return res.status(403).send("You must be logged in to edit a post.");
@@ -60,7 +63,7 @@ blogRouter.put('/edit/:id', async (req, res) => {
         const post = await blogController.retrievePostById(postId, userId);
         if (post.length > 0) {
             // Update the post
-            await blogController.updatePostInDatabase(postId, title, content)
+            await blogController.updatePostInDatabase(postId, title, content);
             res.json({ success: true });
         } else {
             res.status(403).json({ success: false, message: "Unauthorized" });
@@ -78,6 +81,53 @@ blogRouter.get('/new', (req, res) => {
     }
     res.render('newPost', { userId: req.session.userId });
 });
+
+// Route to flag a post by ID
+blogRouter.post('/:id/flag', async (req, res) => {
+    const postId = req.params.id;
+
+    try {
+        await blogController.flagPost(postId, true);
+        res.json({ success: true, message: "Post flagged successfully" });
+    } catch (error) {
+        console.error("Error flagging post:", error);
+        res.status(500).json({ success: false, message: "Error flagging post" });
+    }
+});
+
+// Route to unflag a post by ID
+blogRouter.post('/:id/unflag', async (req, res) => {
+    const postId = req.params.id;
+
+    try {
+        await blogController.flagPost(postId, false);
+        res.json({ success: true, message: "Post unflagged successfully" });
+    } catch (error) {
+        console.error("Error unflagging post:", error);
+        res.status(500).json({ success: false, message: "Error unflagging post" });
+    }
+});
+
+blogRouter.get('/admin', async (req, res) => {
+    if (req.session.role !== 'admin') {
+        return res.status(403).send("Access Denied: Admins only.");
+    }
+
+    try {
+        // Fetch flagged posts or other relevant data for the admin
+        const flagged = await blogController.getFlaggedPosts();
+        console.log("Flagged posts:", flagged);
+
+        // Render the editBlog.ejs file with flagged posts
+        res.render('editBlog', { flagged });
+    } catch (error) {
+        console.error('Error fetching flagged posts:', error);
+
+        // Send an appropriate error message to the admin
+        res.status(500).send("Error loading admin dashboard");
+    }
+});
+
 
 
 module.exports = blogRouter;

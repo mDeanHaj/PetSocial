@@ -596,17 +596,16 @@ input {
   cursor: pointer;
   font-size: 0.9em;
   position: absolute;
-  margin-right: 10px;
-  top: 0;
-  right: 0;
+  top: 10px; /* Adjust spacing */
+  right: 10px; /* Maintain a consistent margin */
 }
+
 .edit-post {
   cursor: pointer;
   font-size: 0.9em;
   position: absolute;
-  margin-right: 25px;
-  top: 0;
-  right: 0;
+  top: 40px; /* Move below the delete button */
+  right: 10px; /* Maintain a consistent margin */
 }
 
 

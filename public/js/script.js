@@ -179,3 +179,19 @@ async function submitEdit(postId) {
   const newContent = document.getElementById(`edit-content`).value;
   await editPost(postId, newTitle, newContent);
 }
+
+// Flag a post
+async function toggleFlag(postId, flagStatus) {
+  try {
+    const response = await fetch(`/blog/${postId}/${flagStatus ? 'flag' : 'unflag'}`, {
+      method: 'POST',
+    });
+    if (response.ok) {
+      location.reload(); // Reload the page to reflect changes
+    } else {
+      alert("Failed to update flag status.");
+    }
+  } catch (error) {
+    console.error("Error toggling flag status:", error);
+  }
+}

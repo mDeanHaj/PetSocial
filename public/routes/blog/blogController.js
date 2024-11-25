@@ -2,7 +2,7 @@ const { executeSQL } = require('../../helpers/dbHelpers');
 
 // Fetch all blog posts
 async function getPostsFromDatabase() {
-    const sql = `SELECT p.post_id, p.title, p.content, p.created_at, u.username, p.user_id
+    const sql = `SELECT p.post_id, p.title, p.content, p.created_at, p.flagged, u.username, p.user_id
                  FROM posts p
                  JOIN users u ON p.user_id = u.user_id
                  ORDER BY p.created_at DESC`;
@@ -21,11 +21,13 @@ async function deletePostFromDatabase(postId) {
     const sql = "DELETE FROM posts WHERE post_id = ?";
     return executeSQL(sql, [postId]);
 }
+
 // Retrieve a post by ID
 async function retrievePostById(postId, userId) {
     const sql = "SELECT * FROM posts WHERE post_id = ? AND user_id = ?";
     return executeSQL(sql, [postId, userId]);
 }
+
 // Update post by ID
 async function updatePostInDatabase(postId, title, content) {
     console.log("Before Executing SQL:", [title, content, postId]);
@@ -34,11 +36,27 @@ async function updatePostInDatabase(postId, title, content) {
     return executeSQL(sql, [title, content, postId]);
 }
 
+// Flag or unflag a post
+async function flagPost(postId, flagStatus) {
+    const sql = "UPDATE posts SET flagged = ? WHERE post_id = ?";
+    const params = [flagStatus, postId];
+    return executeSQL(sql, params);
+}
+async function getFlaggedPosts() {
+    const sql = `SELECT *
+                 FROM posts p
+                 WHERE p.flagged = true`;
+
+    console.log(sql);
+    return executeSQL(sql);
+}
 
 module.exports = {
     getPostsFromDatabase,
     createPostInDatabase,
     deletePostFromDatabase,
     updatePostInDatabase,
-    retrievePostById
+    retrievePostById,
+    flagPost,
+    getFlaggedPosts
 };

@@ -4,15 +4,14 @@
     <!-- Blog Header -->
     <h1 class="page-title">Community Blog</h1>
 
-    
-        <!-- New Post Button (only for logged-in users) -->
-        <% if (userId) { %>
-            <div class="new-post-button-container">
-                <button onclick="window.location.href='/blog/new'" class="new-post-button">Share a New Post</button>
-            </div>
-        <% } else { %>
-            <p class="login-prompt">Please <a href="/login">log in</a> to add a new post.</p>
-        <% } %>
+    <!-- New Post Button (only for logged-in users) -->
+    <% if (userId) { %>
+        <div class="new-post-button-container">
+            <button onclick="window.location.href='/blog/new'" class="new-post-button">Share a New Post</button>
+        </div>
+    <% } else { %>
+        <p class="login-prompt">Please <a href="/login">log in</a> to add a new post.</p>
+    <% } %>
 
     <div class="blog-container">
         <!-- Blog Posts Section -->
@@ -24,10 +23,19 @@
                         <p class="post-author">By <strong><%= post.username %></strong> on <%= new Date(post.created_at).toLocaleDateString() %></p>
                         <p class="post-content"><%= post.content %></p>
 
+                        <!-- Flagging Options -->
+                        <div class="post-actions">
+                            <% if (post.flagged) { %>
+                                <button class="unflag-post" onclick="toggleFlag('<%= post.post_id %>', false)">Unflag</button>
+                            <% } else { %>
+                                <button class="flag-post" onclick="toggleFlag('<%= post.post_id %>', true)">Flag</button>
+                            <% } %>
+                        </div>
+
                         <% if (post.user_id === userId) { %>
                             <span class="edit-post" onclick="showEditForm('<%= post.post_id %>')">✎</span>
                             <span class="delete-post" onclick="deletePost('<%= post.post_id %>')">✖</span>
-                            
+
                             <!-- Edit Form (hidden initially) -->
                             <div id="edit-form-<%= post.post_id %>" class="edit-post-form" style="display: none;">
                                 <h3>Edit Post</h3>
