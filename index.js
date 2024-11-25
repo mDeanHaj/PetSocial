@@ -50,14 +50,51 @@ app.get("/", async (req, res) => {
 
 // Route for Profile page
 app.get("/profile", async (req, res) => {
-  const sql = `
-    SELECT p.profile_id, p.name, p.species, p.age, p.gender, p.bio, i.image_url
+  const { species, gender, age, city, state, zipcode } = req.query;
+
+  let sql = `
+    SELECT p.profile_id, p.name, p.species, p.age, p.gender, p.bio, i.image_url, l.city, l.state, l.zipcode
     FROM profile p
     LEFT JOIN images i ON p.profile_id = i.profile_id
-    ORDER BY p.profile_id`;
+    LEFT JOIN location l ON p.profile_id = l.profile_id
+    WHERE 1=1
+  `;
+  const params = [];
 
-  const rows = await executeSQL(sql);
-  res.render("profile", { profiles: rows, userId: req.session.userId });
+  if (species) {
+    sql += " AND p.species = ?";
+    params.push(species);
+  }
+
+  if (gender) {
+    sql += " AND p.gender = ?";
+    params.push(gender);
+  }
+
+  if (city) {
+    sql += " AND l.city = ?";
+    params.push(city);
+  }
+
+  if (state) {
+    sql += " AND l.state = ?";
+    params.push(state);
+  }
+
+  if (zipcode) {
+    sql += " AND l.zipcode = ?";
+    params.push(zipcode);
+  }
+
+  sql += " ORDER BY p.profile_id";
+
+  try {
+    const rows = await executeSQL(sql, params);
+    res.render("profile", { profiles: rows, userId: req.session.userId, filters: req.query });
+  } catch (err) {
+    console.error("Error retrieving profiles:", err);
+    res.status(500).send("Error retrieving profiles.");
+  }
 });
 
 // Route for Relationship page
