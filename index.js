@@ -592,44 +592,36 @@ app.get("/users", async (req, res) => {
 
 
 // Route to display password reset form
-app.get("/reset-password", (req, res) => {
-  res.render("reset-password", { userId: req.session.userId || null, errorMessage: null });
-});
-
-// POST route for resetting the password
 app.post("/reset-password", async (req, res) => {
   const { token, password, confirmPassword } = req.body;
 
-  // Check if passwords match
   if (password !== confirmPassword) {
     return res.render("newPassword", {
       token,
+      userId: req.session.userId || null, // Pass userId to the view
       errorMessage: "Passwords do not match. Please try again.",
     });
   }
 
-  // Validate the token and update the password in the database
   const user = await executeSQL("SELECT * FROM users WHERE reset_token = ?", [token]);
 
-  // Check if the user exists and if the token has expired
   if (!user || user.reset_token_expiry < new Date()) {
     return res.render("newPassword", {
       token,
+      userId: req.session.userId || null, // Pass userId to the view
       errorMessage: "Invalid or expired token. Please try resetting your password again.",
     });
   }
 
-  // Hash the new password and update it
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  // Update the user's password and clear the reset token fields
-  await executeSQL("UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?", [hashedPassword, token]);
+  await executeSQL(
+    "UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?",
+    [hashedPassword, token]
+  );
 
-   
-  // Render the success page with link to the login page
-  res.render("passwordResetSuccess");
+  res.render("passwordResetSuccess", { userId: req.session.userId || null });
 });
-
 
 //////////// SENGRID CONFIG  ////////////////
 
