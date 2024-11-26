@@ -1,89 +1,87 @@
 <%- include("partials/header.ejs") %>
 
 <div class="content-wrap">
-    <br>
-    <h1>Profiles</h1>
+  <br>
+  <h1>Profiles</h1>
 
-    <!-- Filter By Section -->
-    <div class="filter-toggle">
-      <a href="#" id="filterToggle" onclick="toggleFilterSection()">Filter By</a>
+  <!-- Filter By Section -->
+  <div class="filter-toggle">
+    <a href="#" id="filterToggle" onclick="toggleFilterSection()">Filter By</a>
   </div>
 
   <div class="filter-container" id="filterContainer" style="display: none;">
-      <form method="get" action="/profile">
-          <label for="speciesFilter">Species:</label>
-          <select id="speciesFilter" name="species">
-              <option value="" <%= !filters.species ? 'selected' : '' %>>All</option>
-              <option value="Dog" <%= filters.species === 'Dog' ? 'selected' : '' %>>Dog</option>
-              <option value="Cat" <%= filters.species === 'Cat' ? 'selected' : '' %>>Cat</option>
-              <option value="Bird" <%= filters.species === 'Bird' ? 'selected' : '' %>>Bird</option>
-              <option value="Fish" <%= filters.species === 'Fish' ? 'selected' : '' %>>Fish</option>
-              <option value="Snake" <%= filters.species === 'Snake' ? 'selected' : '' %>>Snake</option>
-              <option value="Rabbit" <%= filters.species === 'Rabbit' ? 'selected' : '' %>>Rabbit</option>
-              <option value="Hamster" <%= filters.species === 'Hamster' ? 'selected' : '' %>>Hamster</option>
-              <option value="Guinea Pig" <%= filters.species === 'Guinea Pig' ? 'selected' : '' %>>Guinea Pig</option>
-              <option value="Turtle" <%= filters.species === 'Turtle' ? 'selected' : '' %>>Turtle</option>
-              <option value="Horse" <%= filters.species === 'Horse' ? 'selected' : '' %>>Horse</option>
-              <option value="Reptile" <%= filters.species === 'Reptile' ? 'selected' : '' %>>Reptile</option>
-          </select>
+    <form method="get" action="/profile">
+      <div>
+        <label for="speciesFilter">Species:</label>
+        <select id="speciesFilter" name="species">
+          <option value="" <%= !filters.species ? 'selected' : '' %>>All</option>
+          <option value="Dog" <%= filters.species === 'Dog' ? 'selected' : '' %>>Dog</option>
+          <option value="Cat" <%= filters.species === 'Cat' ? 'selected' : '' %>>Cat</option>
+          <option value="Bird" <%= filters.species === 'Bird' ? 'selected' : '' %>>Bird</option>
+          <option value="Fish" <%= filters.species === 'Fish' ? 'selected' : '' %>>Fish</option>
+          <option value="Snake" <%= filters.species === 'Snake' ? 'selected' : '' %>>Snake</option>
+          <option value="Rabbit" <%= filters.species === 'Rabbit' ? 'selected' : '' %>>Rabbit</option>
+          <option value="Hamster" <%= filters.species === 'Hamster' ? 'selected' : '' %>>Hamster</option>
+          <option value="Guinea Pig" <%= filters.species === 'Guinea Pig' ? 'selected' : '' %>>Guinea Pig</option>
+          <option value="Turtle" <%= filters.species === 'Turtle' ? 'selected' : '' %>>Turtle</option>
+          <option value="Horse" <%= filters.species === 'Horse' ? 'selected' : '' %>>Horse</option>
+          <option value="Reptile" <%= filters.species === 'Reptile' ? 'selected' : '' %>>Reptile</option>
+        </select>
+  
+        <label for="genderFilter">Gender:</label>
+        <select id="genderFilter" name="gender">
+          <option value="" <%= !filters.gender ? 'selected' : '' %>>All</option>
+          <option value="Male" <%= filters.gender === 'Male' ? 'selected' : '' %>>Male</option>
+          <option value="Female" <%= filters.gender === 'Female' ? 'selected' : '' %>>Female</option>
+        </select>
+ 
+        <label for="cityFilter">City:</label>
+        <input type="text" id="cityFilter" name="city" value="<%= filters.city || '' %>" placeholder="City">
 
-          <!-- Gender Filter -->
-          <label for="genderFilter">Gender:</label>
-          <select id="genderFilter" name="gender">
-              <option value="" <%= !filters.gender ? 'selected' : '' %>>All</option>
-              <option value="Male" <%= filters.gender === 'Male' ? 'selected' : '' %>>Male</option>
-              <option value="Female" <%= filters.gender === 'Female' ? 'selected' : '' %>>Female</option>
-          </select>
+        <label for="stateFilter">State:</label>
+        <input type="text" id="stateFilter" name="state" value="<%= filters.state || '' %>" placeholder="State">
 
-           <!-- City Filter -->
-          <label for="cityFilter">City:</label>
-          <input type="text" id="cityFilter" name="city" value="<%= filters.city || '' %>" placeholder="City">
+        <label for="zipcodeFilter">Zipcode:</label>
+        <input type="text" id="zipcodeFilter" name="zipcode" value="<%= filters.zipcode || '' %>" placeholder="Zipcode">
+      </div>
 
-          <!-- State Filter -->
-          <label for="stateFilter">State:</label>
-          <input type="text" id="stateFilter" name="state" value="<%= filters.state || '' %>" placeholder="State">
-
-          <!-- Zipcode Filter -->
-          <label for="zipcodeFilter">Zipcode:</label>
-          <input type="text" id="zipcodeFilter" name="zipcode" value="<%= filters.zipcode || '' %>" placeholder="Zipcode">
-
-          <!-- Submit Button -->
-          <br/><br/><button type="submit">Apply Filters</button>
-      </form>
+      <div style="width: 100%; text-align: center; margin-top: 10px;">
+        <button type="submit">Apply Filters</button>
+      </div>
+    </form>
   </div>
 
-    <div class="profiles-grid">
-        <% profiles.forEach(function(profile) { %>
-            <div class="profile-box">
-              <!-- Profile Info -->
-              <div>
-                <h2><%= profile.name %></h2>
-                <p><strong>Species:</strong> <%= profile.species %></p>
-                <p><strong>Age:</strong> <%= profile.age %></p>
-                <p><strong>Gender:</strong> <%= profile.gender %></p>
-                <p><strong>Bio:</strong> <%= profile.bio %></p>
-              </div>
+  <div class="profiles-grid">
+    <% profiles.forEach(function(profile) { %>
+      <div class="profile-box">
+        <!-- Profile Info -->
+        <div>
+          <h2><%= profile.name %></h2>
+          <p><strong>Species:</strong> <%= profile.species %></p>
+          <p><strong>Age:</strong> <%= profile.age %></p>
+          <p><strong>Gender:</strong> <%= profile.gender %></p>
+          <p><strong>Bio:</strong> <%= profile.bio %></p>
+        </div>
 
-              <!-- Photo Gallery -->
-              <% if (profile.images && profile.images.length > 0) { %>
-                <div class="gallery">
-                  <% profile.images.forEach((image, index) => { %>
-                    <img src="<%= image.image_url %>" alt="<%= profile.name %> photo <%= index + 1 %>" class="gallery-image">
-                  <% }); %>
-                </div>
-              <% } else { %>
-                <img src="<%= profile.image_url || '/img/default-profile.png' %>" alt="<%= profile.name %>" class="profile-image">
-              <% } %>
-
-            </div>
-        <% }); %>
-    </div>
+        <!-- Photo Gallery -->
+        <% if (profile.images && profile.images.length > 0) { %>
+          <div class="gallery">
+            <% profile.images.forEach((image, index) => { %>
+              <img src="<%= image.image_url %>" alt="<%= profile.name %> photo <%= index + 1 %>" class="gallery-image">
+            <% }); %>
+          </div>
+        <% } else { %>
+          <img src="<%= profile.image_url || '/img/default-profile.png' %>" alt="<%= profile.name %>" class="profile-image">
+        <% } %>
+      </div>
+    <% }); %>
+  </div>
 </div>
 
 <script>
   function toggleFilterSection() {
-      const filterContainer = document.getElementById("filterContainer");
-      filterContainer.style.display = filterContainer.style.display === "none" ? "block" : "none";
+    const filterContainer = document.getElementById("filterContainer");
+    filterContainer.style.display = filterContainer.style.display === "none" ? "block" : "none";
   }
 </script>
 

@@ -8,11 +8,10 @@
 </header>
 
 <div class="center-block">
-    <h2>Add a Friend</h2>
-    <p class="bold">Your Friend ID: <span id="userFriendID" class="bold-text"><%= userId %></span></p><br>
-    <p class="bold">Enter your friend's Friend ID to send them a friend request using the box below.</p>
+    <h2 class="bold">Your Friend ID: <span id="userFriendID" class="bold-text"><%= userId %></span></h2><br>
+    <p class="bold">Enter your friend's Friend ID to send them a friend request!</p>
     <form action="/friends/add" method="POST">
-        <input type="text" name="friendId" placeholder="Enter friend ID" required>
+        <input type="text" name="friendId" placeholder="Enter friend ID" required class="centered">
         <button type="submit">Add Friend</button>
     </form>
 </div>

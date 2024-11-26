@@ -580,10 +580,8 @@ app.get("/users", async (req, res) => {
 
 // Route to display password reset form
 app.get("/reset-password", (req, res) => {
-  res.render("reset-password", { errorMessage: null });
+  res.render("reset-password", { userId: req.session.userId || null, errorMessage: null });
 });
-
-
 
 // POST route for resetting the password
 app.post("/reset-password", async (req, res) => {
