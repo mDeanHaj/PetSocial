@@ -596,36 +596,67 @@ app.get("/reset-password", (req, res) => {
   res.render("reset-password", { userId: req.session.userId || null, errorMessage: null });
 });
 
+// Route for resetting password with the token
+app.get("/reset/:token", async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    // Validate the token in the database
+    const user = await executeSQL("SELECT * FROM users WHERE reset_token = ?", [token]);
+
+    if (!user || user.length === 0 || user[0].reset_token_expiry < new Date()) {
+      return res.status(400).send("Invalid or expired token.");
+    }
+
+    // Render the reset password page, passing the token and userId
+    res.render("newPassword", { token, userId: req.session.userId || null, errorMessage: null });
+  } catch (error) {
+    console.error("Error validating token:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 // POST route for resetting the password
-app.post("/reset-password", async (req, res) => {
-  const { token, password, confirmPassword } = req.body;
+app.post("/password-reset", async (req, res) => {
+  const { username, email } = req.body;
 
-  if (password !== confirmPassword) {
-    return res.render("newPassword", {
-      token,
-      userId: req.session.userId || null, // Pass userId to the view
-      errorMessage: "Passwords do not match. Please try again.",
-    });
+  try {
+    // Check if the username exists in the database
+    const user = await executeSQL("SELECT * FROM users WHERE username = ?", [username]);
+
+    if (!user || user.length === 0) {
+      console.log("User does not exist.");
+      return res.render("reset-password", { errorMessage: "User does not exist.", userId: req.session.userId || null });
+    }
+
+    // Generate a secure token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    // Store the reset token and its expiration in the database
+    await executeSQL(
+      "UPDATE users SET reset_token = ?, reset_token_expiry = NOW() + INTERVAL 1 HOUR WHERE username = ?",
+      [resetToken, username]
+    );
+
+    // Prepare the email content with the reset token link
+    const resetLink = `https://petsocial.tech/reset/${resetToken}`;
+    const msg = {
+      to: email,
+      from: "petsocial.tech@gmail.com",
+      subject: "Password Reset Request",
+      text: `You requested a password reset. Click the following link to reset your password: ${resetLink}`,
+      html: `<p>You requested a password reset. Click the following link to reset your password: <a href="${resetLink}">Reset Password</a></p>`,
+    };
+
+    // Send the email using SendGrid
+    await sgMail.send(msg);
+
+    // Redirect to the emailSent.ejs page
+    res.render("emailSent", { userId: req.session.userId || null });
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    res.status(500).send("Error sending password reset email.");
   }
-
-  const user = await executeSQL("SELECT * FROM users WHERE reset_token = ?", [token]);
-
-  if (!user || user.reset_token_expiry < new Date()) {
-    return res.render("newPassword", {
-      token,
-      userId: req.session.userId || null, // Pass userId to the view
-      errorMessage: "Invalid or expired token. Please try resetting your password again.",
-    });
-  }
-
-  const hashedPassword = bcrypt.hashSync(password, 10);
-
-  await executeSQL(
-    "UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?",
-    [hashedPassword, token]
-  );
-
-  res.render("passwordResetSuccess", { userId: req.session.userId || null });
 });
 
 //////////// SENGRID CONFIG  ////////////////
