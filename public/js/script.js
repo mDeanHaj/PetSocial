@@ -195,3 +195,28 @@ async function toggleFlag(postId, flagStatus) {
     console.error("Error toggling flag status:", error);
   }
 }
+
+// Explore Page
+const map = new mapboxgl.Map({
+  container: "map", // Ensure this matches your HTML element ID
+  style: "mapbox://styles/mapbox/streets-v11",
+  center: [-118.2437, 34.0522], // Default coordinates (e.g., Los Angeles)
+  zoom: 10, // Default zoom level
+});
+
+
+filteredLocations.forEach((location) => {
+  if (location.longitude && location.latitude) {
+    const marker = new mapboxgl.Marker() // Ensure marker attaches to the map
+      .setLngLat([location.longitude, location.latitude])
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // Optional: Customize popup offset
+          .setHTML(
+            `<strong>${location.type}</strong><br>${location.city}, ${location.state}`
+          )
+      )
+      .addTo(map); // Attach to the Mapbox map instance
+    markers.push(marker);
+  }
+});
+

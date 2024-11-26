@@ -107,24 +107,37 @@ app.get("/explore", (req, res) => {
   res.render("explore", { userId: req.session.userId });
 });
 
-app.get("/api/locations", async (req, res) => {
-  try {
-    // Fetch locations from your database
-    const sql = `
-      SELECT location_id, profile_id, city, state, zipcode, 'Pet Shelter' AS type
-      FROM location
-      UNION ALL
-      SELECT location_id + 1000, profile_id, city, state, zipcode, 'Pet Park' AS type
-      FROM location
-      UNION ALL
-      SELECT location_id + 2000, profile_id, city, state, zipcode, 'Pet Store' AS type
-      FROM location
-    `;
+app.get("/api/nearby", async (req, res) => {
+  const { type, latitude, longitude } = req.query;
 
-    const locations = await executeSQL(sql);
-    res.json({ success: true, data: locations });
+  if (!type || !latitude || !longitude) {
+    return res.status(400).json({ success: false, message: "Missing parameters" });
+  }
+
+  try {
+    // Google Places API URL
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY; // Add your API key to .env file
+    const radius = 10000; // 10 km radius
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${encodeURIComponent(type)}&key=${apiKey}`;
+
+    // Fetch data from Google Places API
+    const response = await axios.get(url);
+
+    if (response.data.status !== "OK") {
+      throw new Error(response.data.error_message || "Failed to fetch data from Google Places API");
+    }
+
+    // Format results
+    const results = response.data.results.map((place) => ({
+      name: place.name,
+      address: place.vicinity,
+      latitude: place.geometry.location.lat,
+      longitude: place.geometry.location.lng,
+    }));
+
+    res.json({ success: true, data: results });
   } catch (error) {
-    console.error("Error fetching locations:", error);
+    console.error("Error fetching nearby locations:", error.message);
     res.status(500).json({ success: false, message: "Error fetching locations" });
   }
 });
