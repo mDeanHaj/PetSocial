@@ -220,8 +220,6 @@ filteredLocations.forEach((location) => {
   }
 });
 
-
-
 // Profiles FLoating Box
 function openModal(profileBox) {
   const profileData = profileBox.getAttribute('data-profile');
@@ -237,9 +235,11 @@ function openModal(profileBox) {
       <p><strong>Species:</strong> ${profile.species}</p>
       <p><strong>Age:</strong> ${profile.age}</p>
       <p><strong>Gender:</strong> ${profile.gender}</p>
+      <p><strong>City:</strong> ${profile.city}, ${profile.state}</p>
+      <br/>
       <p><strong>Bio:</strong> ${profile.bio}</p>
-      <p><strong>City:</strong> ${profile.city}</p>
-      <p><strong>State:</strong> ${profile.state}</p>
+      <br/>
+      <div class="fake-button">Friend Request</div>
     `;
 
   const modal = document.getElementById('profileModal');
@@ -251,5 +251,9 @@ function closeModal() {
   modal.classList.remove('show');
 }
 
-
+// Filter Menu
+function toggleDropdown() {
+  const dropdownContent = document.getElementById("dropdownContent");
+  dropdownContent.style.display = dropdownContent.style.display === "none" ? "block" : "none";
+}
 

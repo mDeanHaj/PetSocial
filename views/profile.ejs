@@ -15,17 +15,14 @@
   </div>   
 
   <!-- Filter By Section -->
-  <div class="filter-toggle">
-    <a href="#" id="filterToggle" onclick="toggleFilterSection()">Filter By</a>
-  </div>
-
-  <div class="filter-container" id="filterContainer" style="display: none;">
-    <form method="get" action="/profile">
-      <div>
-        <label for="speciesFilter">Species:</label>
-        <select id="speciesFilter" name="species">
-          <option value="" <%= !filters.species ? 'selected' : '' %>>All</option>
-          <option value="Dog" <%= filters.species === 'Dog' ? 'selected' : '' %>>Dog</option>
+  <div style="text-align: right;">
+    <div class="filter-dropdown">
+      <button onclick="toggleDropdown()" class="dropbtn">Filter By</button>
+      <div id="dropdownContent" class="dropdown-content" style="display: none;">
+        <form method="get" action="/profile">
+          <label for="speciesFilter">Species:</label>
+          <select id="speciesFilter" name="species">
+          <option value="" <%= filters.species ? 'selected' : '' %>>All</option>
           <option value="Cat" <%= filters.species === 'Cat' ? 'selected' : '' %>>Cat</option>
           <option value="Bird" <%= filters.species === 'Bird' ? 'selected' : '' %>>Bird</option>
           <option value="Fish" <%= filters.species === 'Fish' ? 'selected' : '' %>>Fish</option>
@@ -44,23 +41,21 @@
           <option value="Male" <%= filters.gender === 'Male' ? 'selected' : '' %>>Male</option>
           <option value="Female" <%= filters.gender === 'Female' ? 'selected' : '' %>>Female</option>
         </select>
- 
+  
         <label for="cityFilter">City:</label>
         <input type="text" id="cityFilter" name="city" value="<%= filters.city || '' %>" placeholder="City">
-
+  
         <label for="stateFilter">State:</label>
         <input type="text" id="stateFilter" name="state" value="<%= filters.state || '' %>" placeholder="State">
-
+  
         <label for="zipcodeFilter">Zipcode:</label>
         <input type="text" id="zipcodeFilter" name="zipcode" value="<%= filters.zipcode || '' %>" placeholder="Zipcode">
-      </div>
-
-      <div style="width: 100%; text-align: center; margin-top: 10px;">
-        <button type="submit">Apply Filters</button>
-      </div>
-    </form>
+  
+        <button type="submit" class="filter-apply-button">Apply Filters</button>
+      </form>
+    </div>
   </div>
-
+    
   <div class="profiles-grid">
     <% profiles.forEach(function(profile) { %>
       <div class="profile-box" data-profile='<%= JSON.stringify(profile).replace(/'/g, "&#39;") %>' onclick="openModal(this)">
@@ -70,9 +65,8 @@
           <p><strong>Species:</strong> <%= profile.species %></p>
           <p><strong>Age:</strong> <%= profile.age %></p>
           <p><strong>Gender:</strong> <%= profile.gender %></p>
-          <p><strong>Bio:</strong> <%= profile.bio %></p>
-        </br>
-          <p><strong>User ID:</strong> <%= profile.userId %></p>
+          <p><strong>City:</strong> <%= profile.city %>, <%= profile.state %></p>
+          <br/>
         </div>
   
         <!-- Photo Gallery -->
@@ -104,6 +98,7 @@
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 <script src="/js/script.js"></script>
+
 <%- include("partials/footer.ejs") %>
 </body>
 </html>
