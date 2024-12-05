@@ -35,12 +35,11 @@
                             <form onsubmit="submitEdit('<%= post.post_id %>'); return false;">
                                 <div class="form-group">
                                     <label for="edit-title-<%= post.post_id %>">Title:</label>
-                                    <input type="text" id="edit-title-<%= post.post_id %>" name="title" value="<%= post.title %>" required>
+                                    <input type="text" id="edit-title" name="title" value="<%= post.title %>" required>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="edit-content-<%= post.post_id %>">Content:</label>
-                                    <textarea id="edit-content-<%= post.post_id %>" name="content" rows="5" required><%= post.content %></textarea>
+                                    <textarea id="edit-content" name="content" rows="5" required><%= post.content %></textarea>
                                 </div>
 
                                 <button type="button" onclick="submitEdit('<%= post.post_id %>')">Save</button>

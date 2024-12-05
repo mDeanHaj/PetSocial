@@ -150,22 +150,22 @@ app.get("/list/edit", async function (req, res) {
 });
 
 // Route for Edit Blog
-app.get("/editBlog", async (req, res) => {
-  if (req.session.role !== "admin") {
-    return res.status(403).send("Access Denied: Admins only.");
-  }
-
-  try {
-    // Fetch flagged posts
-    const flagged = await executeSQL(`SELECT * FROM posts WHERE flagged = true`);
-
-    // Render the template with flagged posts
-    res.render("editBlog", { flagged, userId: req.session.userId });
-  } catch (error) {
-    console.error("Error fetching flagged posts:", error);
-    res.status(500).send("Error loading admin dashboard");
-  }
-});
+// app.get("/editBlog", async (req, res) => {
+//   if (req.session.role !== "admin") {
+//     return res.status(403).send("Access Denied: Admins only.");
+//   }
+//
+//   try {
+//     // Fetch flagged posts
+//     const flagged = await executeSQL(`SELECT * FROM posts WHERE flagged = true`);
+//
+//     // Render the template with flagged posts
+//     res.render("editBlog", { flagged, userId: req.session.userId });
+//   } catch (error) {
+//     console.error("Error fetching flagged posts:", error);
+//     res.status(500).send("Error loading admin dashboard");
+//   }
+// });
 
 
 // Route for editing a pet profile
