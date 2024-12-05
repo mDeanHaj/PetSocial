@@ -7,12 +7,10 @@
     <!-- New Post Button (only for logged-in users) -->
     <% if (userId) { %>
         <div class="new-post-button-container">
-            <button onclick="window.location.href='/blog/new'" class="new-post-button">+ Share a New Post</button>
+            <button onclick="window.location.href='/blog/new'" class="new-post-button">Share a New Post</button>
         </div>
     <% } else { %>
-        <p class="login-prompt">
-            Please <a href="/login">log in</a> to add a new post.
-        </p>
+        <p class="login-prompt">Please <a href="/login">log in</a> to add a new post.</p>
     <% } %>
 
     <div class="blog-container">
@@ -21,44 +19,44 @@
             <% if (posts.length > 0) { %>
                 <% posts.forEach(post => { %>
                     <div class="post" data-id="<%= post.post_id %>">
-                        <header class="post-header">
-                            <h2 class="post-title"><%= post.title %></h2>
-                            <p class="post-meta">By <strong><%= post.username %></strong> on <%= new Date(post.created_at).toLocaleDateString() %></p>
-                        </header>
+                        <h2 class="post-title"><%= post.title %></h2>
+                        <p class="post-author">By <strong><%= post.username %></strong> on <%= new Date(post.created_at).toLocaleDateString() %></p>
                         <p class="post-content"><%= post.content %></p>
 
-                        <!-- Actions Section -->
+                        <!-- Flagging Options -->
                         <div class="post-actions">
                             <% if (post.flagged) { %>
-                                <button class="action-button unflag-post" onclick="toggleFlag('<%= post.post_id %>', false)">Unflag</button>
+                                <button class="unflag-post" onclick="toggleFlag('<%= post.post_id %>', false)">Unflag</button>
                             <% } else { %>
-                                <button class="action-button flag-post" onclick="toggleFlag('<%= post.post_id %>', true)">Flag</button>
-                            <% } %>
-
-                            <% if (post.user_id === userId) { %>
-                                <button class="action-button edit-post" onclick="showEditForm('<%= post.post_id %>')">Edit</button>
-                                <button class="action-button delete-post" onclick="deletePost('<%= post.post_id %>')">Delete</button>
+                                <button class="flag-post" onclick="toggleFlag('<%= post.post_id %>', true)">Flag</button>
                             <% } %>
                         </div>
 
-
-                        <!-- Edit Form -->
                         <% if (post.user_id === userId) { %>
-                            <div id="edit-form-<%= post.post_id %>" class="edit-post-form hidden">
+                            <span class="edit-post" onclick="showEditForm('<%= post.post_id %>')">✎</span>
+                            <span class="delete-post" onclick="deletePost('<%= post.post_id %>')">✖</span>
+
+                            <!-- Edit Form (hidden initially) -->
+                            <div id="edit-form-<%= post.post_id %>" class="edit-post-form" style="display: none;">
                                 <h3>Edit Post</h3>
                                 <form onsubmit="submitEdit('<%= post.post_id %>'); return false;">
-                                    <label for="edit-title-<%= post.post_id %>">Title:</label>
-                                    <input type="text" id="edit-title-<%= post.post_id %>" value="<%= post.title %>" required>
+                                    <div class="form-group">
+                                        <label for='edit-title'>Title:</label>
+                                        <input type="text" id='edit-title' name="title" value="<%= post.title %>" required>
+                                    </div>
 
-                                    <label for="edit-content-<%= post.post_id %>">Content:</label>
-                                    <textarea id="edit-content-<%= post.post_id %>" rows="5" required><%= post.content %></textarea>
+                                    <div class="form-group">
+                                        <label for='edit-content'>Content:</label>
+                                        <textarea id='edit-content' name="content" rows="5" required><%= post.content %></textarea>
+                                    </div>
 
-                                    <button type="submit" class="action-button save-button">Save</button>
-                                    <button type="button" class="action-button cancel-button" onclick="hideEditForm('<%= post.post_id %>')">Cancel</button>
+                                    <button type="button" onclick="submitEdit('<%= post.post_id %>')">Save</button>
+                                    <button type="button" onclick="hideEditForm('<%= post.post_id %>')">Cancel</button>
                                 </form>
                             </div>
                         <% } %>
                     </div>
+                    <hr class="post-divider">
                 <% }) %>
             <% } else { %>
                 <p class="no-posts-message">No posts yet. Be the first to share!</p>
