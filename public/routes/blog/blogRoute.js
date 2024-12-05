@@ -60,7 +60,7 @@ blogRouter.put('/edit/:id', async (req, res) => {
 
         if (post) {
             // Check if the user owns the post or is an admin
-            if (userRole === 'admin' || post.userId === userId) {
+            if (userRole === 'admin' || Number(post[0].user_id) === Number(userId)) {
                 // Update the post in the database
                 await blogController.updatePostInDatabase(postId, title, content);
                 return res.json({ success: true });
