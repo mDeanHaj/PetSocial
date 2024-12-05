@@ -220,3 +220,36 @@ filteredLocations.forEach((location) => {
   }
 });
 
+
+
+// Profiles FLoating Box
+function openModal(profileBox) {
+  const profileData = profileBox.getAttribute('data-profile');
+  const profile = JSON.parse(profileData);
+
+  // Populate modal content
+    document.getElementById('modalProfileImage').src =
+      profile.image_url || '/img/default-profile.png';
+
+    const modalContent = document.getElementById('modalProfileContent');
+    modalContent.innerHTML = `
+      <h2>My name is: ${profile.name}</h2>
+      <p><strong>Species:</strong> ${profile.species}</p>
+      <p><strong>Age:</strong> ${profile.age}</p>
+      <p><strong>Gender:</strong> ${profile.gender}</p>
+      <p><strong>Bio:</strong> ${profile.bio}</p>
+      <p><strong>City:</strong> ${profile.city}</p>
+      <p><strong>State:</strong> ${profile.state}</p>
+    `;
+
+  const modal = document.getElementById('profileModal');
+  modal.classList.add('show');
+}
+
+function closeModal() {
+  const modal = document.getElementById('profileModal');
+  modal.classList.remove('show');
+}
+
+
+

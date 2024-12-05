@@ -4,6 +4,16 @@
   <br>
   <h1>Profiles</h1>
 
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img id="modalProfileImage" src="" alt="Profile Image" class="profile-image">
+      <div class="modal-profile-info" id="modalProfileContent">
+        <!-- Dynamically populated content will go here -->
+      </div>
+    </div>
+  </div>   
+
   <!-- Filter By Section -->
   <div class="filter-toggle">
     <a href="#" id="filterToggle" onclick="toggleFilterSection()">Filter By</a>
@@ -53,7 +63,7 @@
 
   <div class="profiles-grid">
     <% profiles.forEach(function(profile) { %>
-      <div class="profile-box">
+      <div class="profile-box" data-profile='<%= JSON.stringify(profile).replace(/'/g, "&#39;") %>' onclick="openModal(this)">
         <!-- Profile Info -->
         <div>
           <h2><%= profile.name %></h2>
@@ -64,7 +74,7 @@
         </br>
           <p><strong>User ID:</strong> <%= profile.userId %></p>
         </div>
-
+  
         <!-- Photo Gallery -->
         <% if (profile.images && profile.images.length > 0) { %>
           <div class="gallery">
@@ -80,6 +90,8 @@
   </div>
 </div>
 
+
+
 <script>
   function toggleFilterSection() {
     const filterContainer = document.getElementById("filterContainer");
@@ -87,10 +99,11 @@
   }
 </script>
 
+
+
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
+<script src="/js/script.js"></script>
 <%- include("partials/footer.ejs") %>
-
-<script src="/js/scripts.js"></script>
 </body>
 </html>
