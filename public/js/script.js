@@ -226,21 +226,24 @@ function openModal(profileBox) {
   const profile = JSON.parse(profileData);
 
   // Populate modal content
-    document.getElementById('modalProfileImage').src =
-      profile.image_url || '/img/default-profile.png';
+  document.getElementById('modalProfileImage').src =
+    profile.image_url || '/img/default-profile.png';
 
-    const modalContent = document.getElementById('modalProfileContent');
-    modalContent.innerHTML = `
-      <h2>My name is: ${profile.name}</h2>
-      <p><strong>Species:</strong> ${profile.species}</p>
-      <p><strong>Age:</strong> ${profile.age}</p>
-      <p><strong>Gender:</strong> ${profile.gender}</p>
-      <p><strong>City:</strong> ${profile.city}, ${profile.state}</p>
-      <br/>
-      <p><strong>Bio:</strong> ${profile.bio}</p>
-      <br/>
-      <div class="fake-button">Friend Request</div>
-    `;
+  const modalContent = document.getElementById('modalProfileContent');
+  modalContent.innerHTML = `
+    <h2>My name is: ${profile.name}</h2>
+    <p><strong>Species:</strong> ${profile.species}</p>
+    <p><strong>Age:</strong> ${profile.age}</p>
+    <p><strong>Gender:</strong> ${profile.gender}</p>
+    <p><strong>City:</strong> ${profile.city}, ${profile.state}</p>
+    <br/>
+    <p><strong>Bio:</strong> ${profile.bio}</p>
+    <br/>
+    <form action="/profiles/addFriend" method="POST">
+      <input type="hidden" name="friendId" value="${profile.user_id}">
+      <button type="submit">Add Friend</button>
+    </form>
+  `;
 
   const modal = document.getElementById('profileModal');
   modal.classList.add('show');
