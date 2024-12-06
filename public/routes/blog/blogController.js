@@ -23,9 +23,9 @@ async function deletePostFromDatabase(postId) {
 }
 
 // Retrieve a post by ID
-async function retrievePostById(postId, userId) {
-    const sql = "SELECT * FROM posts WHERE post_id = ? AND user_id = ?";
-    return executeSQL(sql, [postId, userId]);
+async function retrievePostById(postId) {
+    const sql = "SELECT * FROM posts WHERE post_id = ?";
+    return executeSQL(sql, [postId]);
 }
 
 // Update post by ID

@@ -53,7 +53,7 @@ app.get("/profile", async (req, res) => {
   const { species, gender, age, city, state, zipcode } = req.query;
 
   let sql = `
-    SELECT p.profile_id, p.name, p.species, p.age, p.gender, p.bio, i.image_url, l.city, l.state, l.zipcode
+    SELECT p.profile_id, p.name, p.species, p.age, p.gender, p.bio, p.user_id, i.image_url, l.city, l.state, l.zipcode
     FROM profile p
     LEFT JOIN images i ON p.profile_id = i.profile_id
     LEFT JOIN location l ON p.profile_id = l.profile_id
@@ -150,22 +150,22 @@ app.get("/list/edit", async function (req, res) {
 });
 
 // Route for Edit Blog
-app.get("/editBlog", async (req, res) => {
-  if (req.session.role !== "admin") {
-    return res.status(403).send("Access Denied: Admins only.");
-  }
+// app.get("/editBlog", async (req, res) => {
+//   if (req.session.role !== "admin") {
+//     return res.status(403).send("Access Denied: Admins only.");
+//   }
 
-  try {
-    // Fetch flagged posts
-    const flagged = await executeSQL(`SELECT * FROM posts WHERE flagged = true`);
+//   try {
+//     // Fetch flagged posts
+//     const flagged = await executeSQL(`SELECT * FROM posts WHERE flagged = true`);
 
-    // Render the template with flagged posts
-    res.render("editBlog", { flagged, userId: req.session.userId });
-  } catch (error) {
-    console.error("Error fetching flagged posts:", error);
-    res.status(500).send("Error loading admin dashboard");
-  }
-});
+//     // Render the template with flagged posts
+//     res.render("editBlog", { flagged, userId: req.session.userId });
+//   } catch (error) {
+//     console.error("Error fetching flagged posts:", error);
+//     res.status(500).send("Error loading admin dashboard");
+//   }
+// });
 
 
 // Route for editing a pet profile
@@ -202,7 +202,14 @@ app.post("/edit/pet", async (req, res) => {
     await executeSQL(`INSERT INTO images (profile_id, image_url) VALUES (?, ?)`, [profile_id, image_url]);
   }
   
-  res.redirect("/admin");
+  //res.redirect("/admin");
+
+  // Check the user's role (assuming it's stored in the session)
+  if (req.session.role === "admin") {
+    res.redirect("/list/edit");
+  } else {
+    res.redirect("/account");
+  }
 });
 
 // Route to delete a pet profile
@@ -513,6 +520,21 @@ app.get('/logout', (req, res) => {
       return res.status(500).send('Error logging out');
     }
     res.redirect('/login');
+  });
+});
+
+app.post("/profiles/addFriend", (req, res) => {
+  const senderId = req.session.userId;
+  const receiverId = req.body.friendId;
+
+  const query = "INSERT INTO friend_requests (sender_id, receiver_id, status, request_date) VALUES (?, ?, 'pending', NOW())";
+  pool.query(query, [senderId, receiverId], (error, results) => {
+    if (error) {
+      console.error("Error sending friend request:", error);
+      res.status(500).send("Error sending friend request");
+    } else {
+      res.redirect("/profile");
+    }
   });
 });
 

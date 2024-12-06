@@ -26,9 +26,9 @@
                         <!-- Flagging Options -->
                         <div class="post-actions">
                             <% if (post.flagged) { %>
-                                <button class="unflag-post" onclick="toggleFlag('<%= post.post_id %>', false)">Unflag</button>
+                                <span class="unflag-post" onclick="toggleFlag('<%= post.post_id %>', false)">🚩</span>
                             <% } else { %>
-                                <button class="flag-post" onclick="toggleFlag('<%= post.post_id %>', true)">Flag</button>
+                                <span class="flag-post" onclick="toggleFlag('<%= post.post_id %>', true)">🏴</span>
                             <% } %>
                         </div>
 
@@ -67,3 +67,5 @@
 
 <%- include("partials/footer.ejs") %>
 <script src="/js/script.js"></script>
+</body>
+</html>

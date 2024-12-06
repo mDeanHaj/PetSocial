@@ -1,0 +1,61 @@
+<%- include("partials/adminHeader.ejs") %>
+
+<div class="content-wrap">
+    <!-- Blog Header -->
+    <h1 class="page-title">Edit Blog</h1>
+
+    <div class="blog-container">
+        <!-- Blog Posts Section -->
+        <div class="blog-posts">
+            <% if (flagged && flagged.length > 0) { %>
+                <% flagged.forEach(post => { %>
+                    <div class="post" data-id="<%= post.post_id %>">
+                        <h2 class="post-title"><%= post.title %></h2>
+                        <p class="post-author">By <strong><%= post.username %></strong> on <%= new Date(post.created_at).toLocaleDateString() %></p>
+                        <p class="post-content"><%= post.content %></p>
+
+                        <!-- Flagging Options -->
+                        <div class="post-actions">
+                            <% if (post.flagged) { %>
+                                <span class="unflag-post" onclick="toggleFlag('<%= post.post_id %>', false)">🚩</span>
+                            <% } else { %>
+                                <span class="flag-post" onclick="toggleFlag('<%= post.post_id %>', true)">🏴</span>
+                            <% } %>
+                        </div>
+
+                        <!-- Edit/Delete Options -->
+                        <span class="edit-post" onclick="showEditForm('<%= post.post_id %>')">✎</span>
+                        <span class="delete-post" onclick="deletePost('<%= post.post_id %>')">✖</span>
+
+                        <!-- Edit Form (hidden initially) -->
+                        <div id="edit-form-<%= post.post_id %>" class="edit-post-form" style="display: none;">
+                            <h3>Edit Post</h3>
+                            <form onsubmit="submitEdit('<%= post.post_id %>'); return false;">
+                                <div class="form-group">
+                                    <label for="edit-title-<%= post.post_id %>">Title:</label>
+                                    <input type="text" id="edit-title" name="title" value="<%= post.title %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-content-<%= post.post_id %>">Content:</label>
+                                    <textarea id="edit-content" name="content" rows="5" required><%= post.content %></textarea>
+                                </div>
+
+                                <button type="button" onclick="submitEdit('<%= post.post_id %>')">Save</button>
+                                <button type="button" onclick="hideEditForm('<%= post.post_id %>')">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class="post-divider">
+                <% }) %>
+            <% } else { %>
+                <p class="no-posts-message">No flagged posts! Happy day.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer.ejs") %>
+
+<script src="/js/script.js"></script>
+</body>
+</html>
