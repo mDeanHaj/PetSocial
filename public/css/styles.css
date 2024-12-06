@@ -1026,3 +1026,46 @@ input {
 .fake-button:hover {
   background-color: darkred; /* Darker red on hover */
 }
+
+/* Friend Request */
+.friends-container {
+  display: flex;
+  justify-content: space-between; /* Space between the boxes */
+  gap: 20px; /* Spacing between the boxes */
+  flex-wrap: wrap; /* Stack on smaller screens */
+  margin-top: 20px; /* Add some space from the top */
+}
+
+.friend-requests, .current-friends {
+  flex: 1; /* Equal width for both boxes */
+  max-width: 48%; /* Restrict width */
+  background-color: #f9f9f9; /* Match the floating box background */
+  padding: 20px; /* Inner padding */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Floating box shadow effect */
+  text-align: center; /* Center-align text */
+}
+
+.friend-requests h2, .current-friends h2 {
+  margin-bottom: 15px; /* Space below headings */
+  font-weight: bold;
+}
+
+.ul-friends {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.li-friends {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff; /* White background for list items */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
