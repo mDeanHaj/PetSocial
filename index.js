@@ -202,7 +202,14 @@ app.post("/edit/pet", async (req, res) => {
     await executeSQL(`INSERT INTO images (profile_id, image_url) VALUES (?, ?)`, [profile_id, image_url]);
   }
   
-  res.redirect("/admin");
+  //res.redirect("/admin");
+
+  // Check the user's role (assuming it's stored in the session)
+  if (req.session.role === "admin") {
+    res.redirect("/list/edit");
+  } else {
+    res.redirect("/account");
+  }
 });
 
 // Route to delete a pet profile
