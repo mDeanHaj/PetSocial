@@ -1,5 +1,5 @@
 <%- include("partials/adminHeader.ejs") %>
-
+<div class="centered">
   <h1>Edit User</h1>
   <form action="/update/user" method="POST">
     <input type="hidden" name="user_id" value="<%= user.user_id %>">
@@ -18,8 +18,11 @@
 
     <button type="submit">Save Changes</button>
   </form>
+</div>
 
-  <%- include("partials/footer.ejs") %>
+<br/></br/><br/>
+
+<%- include("partials/footer.ejs") %>
 
 </body>
 </html>
