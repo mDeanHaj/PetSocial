@@ -53,7 +53,7 @@ app.get("/profile", async (req, res) => {
   const { species, gender, age, city, state, zipcode } = req.query;
 
   let sql = `
-    SELECT p.profile_id, p.name, p.species, p.age, p.gender, p.bio, i.image_url, l.city, l.state, l.zipcode
+    SELECT p.profile_id, p.name, p.species, p.age, p.gender, p.bio, p.user_id, i.image_url, l.city, l.state, l.zipcode
     FROM profile p
     LEFT JOIN images i ON p.profile_id = i.profile_id
     LEFT JOIN location l ON p.profile_id = l.profile_id
@@ -513,6 +513,21 @@ app.get('/logout', (req, res) => {
       return res.status(500).send('Error logging out');
     }
     res.redirect('/login');
+  });
+});
+
+app.post("/profiles/addFriend", (req, res) => {
+  const senderId = req.session.userId;
+  const receiverId = req.body.friendId;
+
+  const query = "INSERT INTO friend_requests (sender_id, receiver_id, status, request_date) VALUES (?, ?, 'pending', NOW())";
+  pool.query(query, [senderId, receiverId], (error, results) => {
+    if (error) {
+      console.error("Error sending friend request:", error);
+      res.status(500).send("Error sending friend request");
+    } else {
+      res.redirect("/profile");
+    }
   });
 });
 
