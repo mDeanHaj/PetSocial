@@ -5,11 +5,6 @@ const blogController = require('./blogController');
 // Route for the blog page - Get all posts
 blogRouter.get('/', async (req, res) => {
     try {
-        // Check if the user is an admin
-        if (req.session.role === 'admin') {
-            return res.redirect('/blog/admin'); // Redirect admin to their dashboard
-        }
-
         const posts = await blogController.getPostsFromDatabase();
         res.render('blog', { posts, userId: req.session.userId });
     } catch (error) {
@@ -52,6 +47,7 @@ blogRouter.delete('/:id', async (req, res) => {
 blogRouter.put('/edit/:id', async (req, res) => {
     const postId = req.params.id;
     const userId = req.session.userId;
+    const userRole = req.session.role;
     const { title, content } = req.body;
 
     if (!userId) {
@@ -59,20 +55,27 @@ blogRouter.put('/edit/:id', async (req, res) => {
     }
 
     try {
-        // Check if the user owns the post before updating
-        const post = await blogController.retrievePostById(postId, userId);
-        if (post.length > 0) {
-            // Update the post
-            await blogController.updatePostInDatabase(postId, title, content);
-            res.json({ success: true });
+        // Retrieve the post from the database
+        const post = await blogController.retrievePostById(postId);
+
+        if (post) {
+            // Check if the user owns the post or is an admin
+            if (userRole === 'admin' || Number(post[0].user_id) === Number(userId)) {
+                // Update the post in the database
+                await blogController.updatePostInDatabase(postId, title, content);
+                return res.json({ success: true });
+            } else {
+                return res.status(403).json({ success: false, message: "Unauthorized" });
+            }
         } else {
-            res.status(403).json({ success: false, message: "Unauthorized" });
+            return res.status(404).json({ success: false, message: "Post not found" });
         }
     } catch (error) {
         console.error("Error editing post:", error);
         res.status(500).send("Error editing post");
     }
 });
+
 
 // Route to render the new post form
 blogRouter.get('/new', (req, res) => {
@@ -118,8 +121,8 @@ blogRouter.get('/admin', async (req, res) => {
         const flagged = await blogController.getFlaggedPosts();
         console.log("Flagged posts:", flagged);
 
-        // Render the editBlog.ejs file with flagged posts
-        res.render('editBlog', { flagged });
+        // Render the blogAdmin.ejs file with flagged posts
+        res.render('blogAdmin', { flagged });
     } catch (error) {
         console.error('Error fetching flagged posts:', error);
 
